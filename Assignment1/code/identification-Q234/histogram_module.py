@@ -1,6 +1,23 @@
 import numpy as np
 from numpy import histogram as hist
 
+#  Compute the equal width bin interval
+def bin_interval(num_bins):
+    interval_size = 255/num_bins
+    interval = []
+    temp = 0
+    for i in range(num_bins):
+      interval.append([temp, temp + interval_size])
+      temp += interval_size
+
+    return interval
+
+#  normalise an array
+def normalize(x):
+    normalized_test_array = (x - min(x)) / (max(x) - min(x)) 
+    return normalized_test_array
+
+
 #  compute histogram of image intensities, histogram should be normalized so that sum of all values equals 1
 #  assume that image intensity varies between 0 and 255
 #
@@ -10,8 +27,17 @@ def normalized_hist(img_gray, num_bins):
     assert len(img_gray.shape) == 2, 'image dimension mismatch'
     assert img_gray.dtype == 'float', 'incorrect image type'
 
+    hists = np.zeros(num_bins)
+    interval = bin_interval(num_bins)
+    for i in img_gray.flatten():
+      for pos, bins in enumerate(interval):
+        if i >= bins[0] and i < bins[1]:
+          hists[pos] += 1
+    hists = normalize(hists)
+    bins = [i[0] for i in interval]
+    bins.append(float(255))
     # your code here
-    return hists, bins
+    return hists, np.asarray(bins, dtype=np.float32)
 
 #  compute joint histogram for each color channel in the image, histogram should be normalized so that sum of all values equals 1
 #  assume that values in each channel vary between 0 and 255
