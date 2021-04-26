@@ -50,13 +50,25 @@ def rgb_hist(img_color, num_bins):
 
     # define a 3D histogram  with "num_bins^3" number of entries
     hists = np.zeros((num_bins, num_bins, num_bins))
-    
+    interval = bin_interval(num_bins)
+
     # execute the loop for each pixel in the image 
     for i in range(img_color.shape[0]):
-        for i in range(img_color.shape[1]):
+        for j in range(img_color.shape[1]):
             # increment a histogram bin which corresponds to the value of pixel i,j; h(R,G,B)
             # ...
-            pass
+            R,G,B = img_color[i][j]
+            for pos, bins in enumerate(interval):
+              if R >= bins[0] and R < bins[1]:
+                posR = pos
+            for pos, bins in enumerate(interval):
+              if B >= bins[0] and B < bins[1]:
+                posB = pos
+            for pos, bins in enumerate(interval):
+              if G >= bins[0] and G < bins[1]:
+                posG = pos
+            hists[posR][posG][posB] += 1
+
 
     # normalize the histogram such that its integral (sum) is equal 1
     # your code here
