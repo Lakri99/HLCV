@@ -2,8 +2,8 @@ import numpy as np
 from numpy import histogram as hist
 
 #  Compute the equal width bin interval
-def bin_interval(num_bins):
-    interval_size = 255/num_bins
+def bin_interval(num_bins, color_range=255):
+    interval_size = color_range/num_bins
     interval = []
     temp = 0
     for i in range(num_bins):
@@ -14,7 +14,9 @@ def bin_interval(num_bins):
 
 #  normalise an array
 def normalize(x):
-    normalized_test_array = (x - min(x)) / (max(x) - min(x)) 
+    # normalized_test_array = (x - min(x)) / (max(x) - min(x)) 
+    sum = x.sum()
+    normalized_test_array = x / sum
     return normalized_test_array
 
 
@@ -58,6 +60,9 @@ def rgb_hist(img_color, num_bins):
             # increment a histogram bin which corresponds to the value of pixel i,j; h(R,G,B)
             # ...
             R,G,B = img_color[i][j]
+            posR = None
+            posB = None
+            posG = None
             for pos, bins in enumerate(interval):
               if R >= bins[0] and R < bins[1]:
                 posR = pos
@@ -72,7 +77,7 @@ def rgb_hist(img_color, num_bins):
 
     # normalize the histogram such that its integral (sum) is equal 1
     # your code here
-
+    hists = normalize(hists)
     hists = hists.reshape(hists.size)
     return hists
 
@@ -89,9 +94,23 @@ def rg_hist(img_color, num_bins):
   
     # define a 2D histogram  with "num_bins^2" number of entries
     hists = np.zeros((num_bins, num_bins))
+    interval = bin_interval(num_bins, 1)
     
     # your code here
+    for i in range(img_color.shape[0]):
+        for j in range(img_color.shape[1]):
+            R,G,B = img_color[i][j]
+            r = R / (R + G + B)
+            g = G / (R + G + B)
+            for pos, bins in enumerate(interval):
+              if r >= bins[0] and r < bins[1]:
+                posr = pos
+            for pos, bins in enumerate(interval):
+              if g >= bins[0] and g < bins[1]:
+                posg = pos
+            hists[posr][posg] += 1
 
+    hists = normalize(hists)
     hists = hists.reshape(hists.size)
     return hists
 

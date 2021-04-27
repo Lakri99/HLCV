@@ -34,6 +34,10 @@ def find_best_match(model_images, query_images, dist_type, hist_type, num_bins):
   D = np.zeros((len(model_images), len(query_images)))
 
   # your code here
+  for qid, query in enumerate(query):
+    for mid, model in enumerate(model):
+      D[mid, qid] = dist_module.get_dist_by_name(model, query, dist_type)
+    best_match = np.argsort(D[:,qid])[5]
 
   return best_match, D
 
@@ -43,6 +47,16 @@ def compute_histograms(image_list, hist_type, hist_isgray, num_bins):
 
   # compute hisgoram for each image and add it at the bottom of image_hist
   # your code here
+  for img in image_list:
+    img_color = np.array(Image.open(img))
+    img = img_color.astype('double')
+
+    if hist_isgray:
+      img = rgb2gray(img_color.astype('double'))
+    hist = histogram_module.get_hist_by_name(img, num_bins, hist_type)
+    if len(hist) == 2 and len(hist[0]) > 1:
+      hist = hist[0]
+    image_hist.append(hist)
 
   return image_hist
 
