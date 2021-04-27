@@ -32,14 +32,14 @@ def find_best_match(model_images, query_images, dist_type, hist_type, num_bins):
   query_hists = compute_histograms(query_images, hist_type, hist_isgray, num_bins)
 
   D = np.zeros((len(model_images), len(query_images)))
-
+  best_match = []
   # your code here
-  for qid, query in enumerate(query):
-    for mid, model in enumerate(model):
+  for qid, query in enumerate(query_hists):
+    for mid, model in enumerate(model_hists):
       D[mid, qid] = dist_module.get_dist_by_name(model, query, dist_type)
-    best_match = np.argsort(D[:,qid])[5]
+    best_match.append(np.argsort(D[:,qid])[0])
 
-  return best_match, D
+  return np.array(best_match), D
 
 def compute_histograms(image_list, hist_type, hist_isgray, num_bins):
 
@@ -69,11 +69,22 @@ def compute_histograms(image_list, hist_type, hist_isgray, num_bins):
 
 def show_neighbors(model_images, query_images, dist_type, hist_type, num_bins):
 
-  plt.figure()
+  fig=plt.figure(figsize=(3, 5))
 
   num_nearest = 5  # show the top-5 neighbors
 
   # your code here
+  best_match, D = find_best_match(model_images, query_images, dist_type, hist_type, num_bins)
+  i=1
+  for qid in range(len(query_images)):
+    model_ids = np.argsort(D[:,qid])[:5]
+    for mid in model_ids:
+      fig.add_subplot(3, 5, i)
+      img = model_images[mid]
+      img_color = np.array(Image.open(img))
+      plt.imshow(img_color)
+      i+=1
+  plt.show()
 
 
 
