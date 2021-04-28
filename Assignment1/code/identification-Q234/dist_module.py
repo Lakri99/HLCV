@@ -6,7 +6,7 @@ import math
 #
 def dist_chi2(x,y):
   # your code here
-  return np.sum(np.divide((x - y) ** 2, x))
+  return np.sum(np.divide((x - y) ** 2, x + y + 1))
 
 # 
 # compute l2 distance between x and y

@@ -69,7 +69,7 @@ def compute_histograms(image_list, hist_type, hist_isgray, num_bins):
 
 def show_neighbors(model_images, query_images, dist_type, hist_type, num_bins):
 
-  fig=plt.figure(figsize=(3, 5))
+  fig=plt.figure(figsize=(3, 6))
 
   num_nearest = 5  # show the top-5 neighbors
 
@@ -78,13 +78,22 @@ def show_neighbors(model_images, query_images, dist_type, hist_type, num_bins):
   i=1
   for qid in range(len(query_images)):
     model_ids = np.argsort(D[:,qid])[:5]
+    img = query_images[qid]
+    i = plot_image(img, i, fig)
     for mid in model_ids:
-      fig.add_subplot(3, 5, i)
       img = model_images[mid]
-      img_color = np.array(Image.open(img))
-      plt.imshow(img_color)
-      i+=1
+      i = plot_image(img, i, fig)
   plt.show()
+
+# Plot images
+def plot_image(img, i, fig):
+  fig.add_subplot(3, 6, i)
+  img_color = np.array(Image.open(img))
+  plt.imshow(img_color)
+  i=i+1
+  return i
+
+
 
 
 

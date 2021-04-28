@@ -1,11 +1,13 @@
 import numpy as np
 from numpy import histogram as hist
 
+import gauss_module
+
 #  Compute the equal width bin interval
-def bin_interval(num_bins, color_range=255):
-    interval_size = color_range/num_bins
+def bin_interval(num_bins, color_range=[0,255]):
+    interval_size = (color_range[1] - color_range[0]) /num_bins
     interval = []
-    temp = 0
+    temp = color_range[0]
     for i in range(num_bins):
       interval.append([temp, temp + interval_size])
       temp += interval_size
@@ -66,10 +68,8 @@ def rgb_hist(img_color, num_bins):
             for pos, bins in enumerate(interval):
               if R >= bins[0] and R < bins[1]:
                 posR = pos
-            for pos, bins in enumerate(interval):
               if B >= bins[0] and B < bins[1]:
                 posB = pos
-            for pos, bins in enumerate(interval):
               if G >= bins[0] and G < bins[1]:
                 posG = pos
             hists[posR][posG][posB] += 1
@@ -94,18 +94,19 @@ def rg_hist(img_color, num_bins):
   
     # define a 2D histogram  with "num_bins^2" number of entries
     hists = np.zeros((num_bins, num_bins))
-    interval = bin_interval(num_bins, 1)
-    
+    interval = bin_interval(num_bins, [0,1])
+
     # your code here
     for i in range(img_color.shape[0]):
         for j in range(img_color.shape[1]):
             R,G,B = img_color[i][j]
             r = R / (R + G + B)
             g = G / (R + G + B)
+            posr = None
+            posg = None
             for pos, bins in enumerate(interval):
               if r >= bins[0] and r < bins[1]:
                 posr = pos
-            for pos, bins in enumerate(interval):
               if g >= bins[0] and g < bins[1]:
                 posg = pos
             hists[posr][posg] += 1
@@ -129,15 +130,29 @@ def dxdy_hist(img_gray, num_bins):
 
     # compute the first derivatives
     # ...
+    sigma = 7.0
+    # smooth_img = gauss_module.gaussianfilter(img_gray, sigma)
+    [imgDx, imgDy] = gauss_module.gaussderiv(img_gray, sigma)
 
     # quantize derivatives to "num_bins" number of values
     # ...
+    interval = bin_interval(num_bins, [-30,30])
 
     # define a 2D histogram  with "num_bins^2" number of entries
     hists = np.zeros((num_bins, num_bins))
 
     # ...
-    
+    for (dx,dy) in zip(imgDx.flatten(), imgDy.flatten()):
+      pos_dx = None
+      pos_dy = None
+      for pos, bins in enumerate(interval):
+        if dx >= bins[0] and dx < bins[1]:
+          pos_dx = pos
+        if dy >= bins[0] and dy < bins[1]:
+          pos_dy = pos
+      hists[pos_dx, pos_dy] += 1
+
+    hists = normalize(hists)
     hists = hists.reshape(hists.size)
     return hists
 
