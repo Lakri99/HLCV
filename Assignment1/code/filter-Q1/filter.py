@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import gauss_module
 
 def rgb2gray(rgb):
-
+    print(rgb)
     r, g, b = rgb[:,:,0], rgb[:,:,1], rgb[:,:,2]
     gray = 0.2989 * r + 0.5870 * g + 0.1140 * b
 
@@ -16,7 +16,6 @@ def rgb2gray(rgb):
 
 
 ## function gauss (Question 1.a)
-
 sigma = 4.0
 [gx, x] = gauss_module.gauss(sigma)
 
@@ -26,7 +25,7 @@ plt.show()
 
 
 ## function gaussianfilter (Question 1.b)
-img = rgb2gray(np.array(Image.open('graf.png')))
+img = rgb2gray(np.array(Image.open('graf.png'))) 
 smooth_img = gauss_module.gaussianfilter(img, sigma)
 
 plt.figure()
@@ -39,9 +38,7 @@ plt.imshow(smooth_img, cmap='gray', vmin=0, vmax=255)
 plt.show()
 
 
-
 ## function gaussdx (Question 1.c)
-
 img = np.zeros([27,27])
 img[13, 13] = 1.0
 plt.figure(), plt.imshow(img, cmap='gray')
