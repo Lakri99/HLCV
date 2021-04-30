@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import histogram_module
 import dist_module
 import match_module
-# import rpc_module
+import rpc_module
 
 def rgb2gray(rgb):
 
@@ -60,7 +60,7 @@ plt.show()
 
 num_bins_color = 5
 plt.subplot(1,4,4)
-hist_rgb1 = histogram_module.dxdy_hist(iimg_gray, num_bins_gray)
+hist_rgb1 = histogram_module.dxdy_hist(img_gray, num_bins_gray)
 plt.bar(np.array(range(1,hist_rgb1.size+1)),hist_rgb1)
 plt.show()
 
@@ -147,7 +147,7 @@ query_images = [x.strip() for x in query_images]
 
 eval_dist_type = 'intersect'
 eval_hist_type = 'rg'
-eval_num_bins = 30
+eval_num_bins = 40
 
 
 [best_match, D] = match_module.find_best_match(model_images, query_images, eval_dist_type, eval_hist_type, eval_num_bins)
