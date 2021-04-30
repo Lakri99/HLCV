@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import histogram_module
 import dist_module
 import match_module
-import rpc_module
+# import rpc_module
 
 def rgb2gray(rgb):
 
@@ -36,22 +36,33 @@ hist_gray2, bin_gray2 = histogram_module.normalized_hist(img_gray, num_bins_gray
 plt.bar((bin_gray2[0:-1] + bin_gray2[1:])/2, hist_gray2)
 plt.show()
 
-## more histograms (Question 2.b)
+# ## more histograms (Question 2.b)
 
 plt.figure()
-plt.subplot(1,2,1)
+plt.subplot(1,4,1)
 plt.imshow(img_color)
 
 num_bins_color = 5
-plt.subplot(1,2,2)
+plt.subplot(1,4,2)
 hist_rgb1 = histogram_module.rgb_hist(img_color.astype('double'), num_bins_color)
 plt.bar(np.array(range(1,hist_rgb1.size+1)),hist_rgb1)
 plt.show()
 
 # compose rg_hist.m and dxdy_hist.m as well
 
+num_bins_color = 5
+plt.subplot(1,4,3)
+hist_rgb1 = histogram_module.rg_hist(img_color.astype('double'), num_bins_color)
+plt.bar(np.array(range(1,hist_rgb1.size+1)),hist_rgb1)
+plt.show()
+
 # add your code here
 
+num_bins_color = 5
+plt.subplot(1,4,4)
+hist_rgb1 = histogram_module.dxdy_hist(iimg_gray, num_bins_gray)
+plt.bar(np.array(range(1,hist_rgb1.size+1)),hist_rgb1)
+plt.show()
 
 
 ## distance functions (Question 2.c)
@@ -76,8 +87,8 @@ hist_types = ['grayvalue', 'rgb', 'rg', 'dxdy']
 print(hist_types)
 print('\n')
 
-num_bins_color = 30;
-num_bins_gray = 90;
+num_bins_color = 30
+num_bins_gray = 90
 
 for imgidx1 in range(len(image_files1)):
   img1_color = np.array(Image.open(image_files1[imgidx1]))
@@ -106,7 +117,7 @@ for imgidx1 in range(len(image_files1)):
           if len(hist2) == 2 and len(hist2[0]) > 1:
             hist2 = hist2[0]
 
-          D[hidx, didx] = dist_module.get_dist_by_name(hist1, hist2, distance_types[didx])
+          D[didx, hidx] = dist_module.get_dist_by_name(hist1, hist2, distance_types[didx])
         else:
           hist1 = histogram_module.get_hist_by_name(img1_color, num_bins_color, hist_types[hidx])
           hist2 = histogram_module.get_hist_by_name(img2_color, num_bins_color, hist_types[hidx])
@@ -116,7 +127,7 @@ for imgidx1 in range(len(image_files1)):
           if len(hist2) == 2 and len(hist2[0]) > 1:
             hist2 = hist2[0]
 
-          D[hidx, didx] = dist_module.get_dist_by_name(hist1, hist2, distance_types[didx])
+          D[didx, hidx] = dist_module.get_dist_by_name(hist1, hist2, distance_types[didx])
 
     print('compare image "%s" to "%s":'% (image_files1[imgidx1], image_files2[imgidx2]))
     print(D)
@@ -134,21 +145,21 @@ with open('query.txt') as fp:
     query_images = fp.readlines()
 query_images = [x.strip() for x in query_images] 
 
-eval_dist_type = 'intersect';
-eval_hist_type = 'rg';
-eval_num_bins = 30;
+eval_dist_type = 'intersect'
+eval_hist_type = 'rg'
+eval_num_bins = 30
 
 
 [best_match, D] = match_module.find_best_match(model_images, query_images, eval_dist_type, eval_hist_type, eval_num_bins)
 
 
-## visualize nearest neighbors (Question 3.b)
+# ## visualize nearest neighbors (Question 3.b)
 query_images_vis = [query_images[i] for i in np.array([0,4,9])]
 match_module.show_neighbors(model_images, query_images_vis, eval_dist_type, eval_hist_type, eval_num_bins)
 
 
-## compute recognition percentage (Question 3.c)
-# import ipdb; ipdb.set_trace()
+# ## compute recognition percentage (Question 3.c)
+# import pdb; pdb.set_trace()
 num_correct = sum( best_match == range(len(query_images)) )
 print('number of correct matches: %d (%f)\n'% (num_correct, 1.0 * num_correct / len(query_images)))
 
