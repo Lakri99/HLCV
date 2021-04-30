@@ -6,7 +6,11 @@ import math
 #
 def dist_chi2(x,y):
   # your code here
-  return np.sum(np.nan_to_num(np.divide((x - y) ** 2, x + y )))
+  #To remove 0's at the same index in both x and y to avoid divide by zero
+  mask = ~((x == 0) & (y==0))
+  x,y = x[mask], y[mask]
+  return np.sum(np.divide((x - y) ** 2, x + y ))
+  #return np.sum(np.nan_to_num(np.divide((x - y) ** 2, x + y )))
 
 
 # 

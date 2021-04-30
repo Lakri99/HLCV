@@ -163,7 +163,6 @@ match_module.show_neighbors(model_images, query_images_vis, eval_dist_type, eval
 num_correct = sum( best_match == range(len(query_images)) )
 print('number of correct matches: %d (%f)\n'% (num_correct, 1.0 * num_correct / len(query_images)))
 
-
 ## plot recall_precision curves (Question 4)
 
 with open('model.txt') as fp:
@@ -174,7 +173,7 @@ with open('query.txt') as fp:
     query_images = fp.readlines()
 query_images = [x.strip() for x in query_images] 
 
-eval_num_bins = 20;
+eval_num_bins = 20
 
 
 plt.figure()
