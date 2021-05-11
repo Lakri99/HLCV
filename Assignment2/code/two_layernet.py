@@ -76,15 +76,21 @@ class TwoLayerNet(object):
         N, D = X.shape
 
         # Compute the forward pass
-        scores = 0.
+        #scores = 0.
+        scores = np.empty([0,b2.shape[0]])
         #############################################################################
         # TODO: Perform the forward pass, computing the class probabilities for the #
         # input. Store the result in the scores variable, which should be an array  #
         # of shape (N, C).                                                          #
         #############################################################################
-        # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-        pass
+        # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****np.dot
+        for i in range(N):
+          a_1 = X[i]
+          z_2 = np.add(np.dot(a_1, W1), b1)
+          a_2 = np.maximum(0,z_2)
+          z_3 = np.add(np.dot(a_2, W2), b2)
+          a_3 = np.exp(z_3)/np.sum(np.exp(z_3))
+          scores = np.append(scores, np.array([a_3]), axis=0)
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
@@ -102,7 +108,13 @@ class TwoLayerNet(object):
         #############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         # Implement the loss for softmax output layer
-        pass
+
+        # Using multidimensional array indexing to extract 
+        # softmax probability of the correct label for each sample.
+        log_probs = np.log(scores[range(N),y])
+        data_loss = (-1.0/N) * np.sum(log_probs)
+        L2_reg_loss = reg*(np.linalg.norm(W1,'fro') + np.linalg.norm(W2,'fro'))
+        loss = data_loss + L2_reg_loss
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
