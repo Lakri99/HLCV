@@ -97,7 +97,7 @@ correct_loss = 1.30378789133
 print('Difference between your loss and correct loss:')
 print(np.sum(np.abs(loss - correct_loss)))
 
-'''
+
 #======================================================================================
 # Q2:Computing gradients using back propogation
 #======================================================================================
@@ -277,4 +277,3 @@ show_net_weights(best_net)
 
 test_acc = (best_net.predict(X_test) == y_test).mean()
 print('Test accuracy: ', test_acc)
-'''
