@@ -4,6 +4,8 @@ import torchvision
 import torchvision.transforms as transforms
 import sys
 
+torch.manual_seed(100)
+
 def weights_init(m):
     if type(m) == nn.Linear:
         m.weight.data.normal_(0.0, 1e-3)
@@ -23,10 +25,11 @@ print('Using device: %s'%device)
 # Hyper-parameters
 #--------------------------------
 input_size = 32 * 32 * 3
-hidden_size = [50]
+# hidden_size = [1541]
+hidden_size = [1034, 512]
 num_classes = 10
 num_epochs = 10
-batch_size = 200
+batch_size = 256
 learning_rate = 1e-3
 learning_rate_decay = 0.95
 reg=0.001
@@ -47,7 +50,8 @@ cifar_dataset = torchvision.datasets.CIFAR10(root='datasets/',
 
 test_dataset = torchvision.datasets.CIFAR10(root='datasets/',
                                           train=False,
-                                          transform=norm_transform
+                                          transform=norm_transform,
+                                          download=False
                                           )
 #-------------------------------------------------
 # Prepare the training and validation splits
@@ -105,9 +109,46 @@ class MultiLayerPerceptron(nn.Module):
         # hidden_layers[-1] --> num_classes                                             #
         # Make use of linear and relu layers from the torch.nn module                   #
         #################################################################################
-        layes = []
+        layers = []
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
+        self.conv_layer = nn.Sequential(
+
+            # Conv Layer block 1
+            nn.Conv2d(in_channels=3, out_channels=32, kernel_size=3, padding=1),
+            nn.BatchNorm2d(32),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+
+            # Conv Layer block 2
+            nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, padding=1),
+            nn.BatchNorm2d(128),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(in_channels=128, out_channels=128, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+            nn.Dropout2d(p=0.05),
+
+            # Conv Layer block 3
+            nn.Conv2d(in_channels=128, out_channels=256, kernel_size=3, padding=1),
+            nn.BatchNorm2d(256),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(in_channels=256, out_channels=256, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=2, stride=2),
+        )
+
+
+        layers.append(nn.Dropout(p=0.1))
+        layers.append(nn.Linear(256*4*4, hidden_layers[0]))
+        layers.append(nn.ReLU(inplace=True))
+        for i in range(1, len(hidden_layers)):
+            layers.append(nn.Linear(hidden_layers[i-1], hidden_layers[i]))
+            layers.append(nn.ReLU(inplace=True))
+        layers.append(nn.Dropout(p=0.1))
+        layers.append(nn.Linear(hidden_layers[-1], num_classes))
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         self.layers = nn.Sequential(*layers)
@@ -121,11 +162,15 @@ class MultiLayerPerceptron(nn.Module):
         #################################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
+        x = self.conv_layer(x) #omit this line for base model
+        x = x.view(x.size(0), -1)
 
+        out = self.layers(x)
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         return out
 
 model = MultiLayerPerceptron(input_size, hidden_size, num_classes).to(device)
+print(model)
 if train:
     model.apply(weights_init)
 
@@ -150,12 +195,11 @@ if train:
             # Use examples in https://pytorch.org/tutorials/beginner/pytorch_with_examples.html
             #################################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-
-
-
-
-
+            optimizer.zero_grad()
+            predicted = model(images)
+            loss = criterion(predicted, labels)
+            loss.backward()
+            optimizer.step()
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
             if (i+1) % 100 == 0:
@@ -177,8 +221,8 @@ if train:
                 # 2. Get the most confident predicted class        #
                 ####################################################
                 # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-
+                output = model(images)
+                _, predicted = torch.max(output, dim=1)
 
                 # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
                 total += labels.size(0)
@@ -208,7 +252,7 @@ else:
     # and loading the best model
 
     best_model = None # torch.load()
-    mode.load_state_dict(best_model)
+    model.load_state_dict(best_model)
     # Test the model
     # In test phase, we don't need to compute gradients (for memory efficiency)
     with torch.no_grad():
@@ -223,7 +267,8 @@ else:
             # 2. Get the most confident predicted class        #
             ####################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
+            output = model(images)
+            _, predicted = torch.max(output, dim=1)
 
 
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
