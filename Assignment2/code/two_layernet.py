@@ -76,22 +76,25 @@ class TwoLayerNet(object):
         N, D = X.shape
 
         # Compute the forward pass
-        #scores = 0.
-        scores = np.empty([0,b2.shape[0]])
+        scores = 0.
         #############################################################################
         # TODO: Perform the forward pass, computing the class probabilities for the #
         # input. Store the result in the scores variable, which should be an array  #
         # of shape (N, C).                                                          #
         #############################################################################
-        # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****np.dot
-        for i in range(N):
-          a_1 = X[i]
-          z_2 = np.add(np.dot(a_1, W1), b1)
-          a_2 = np.maximum(0,z_2)
-          z_3 = np.add(np.dot(a_2, W2), b2)
-          a_3 = np.exp(z_3)/np.sum(np.exp(z_3))
-          scores = np.append(scores, np.array([a_3]), axis=0)
-
+        # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+        #
+        # Shape of z_2  = (N,D) X (D,H) = (N,H)
+        z2 = np.matmul(X,W1) + b1
+        #RELU activation, shape of a_2 = (N.H)
+        a2 = np.maximum(0,z2)
+        #Shape of z_3 = (N,H) X (H,C) = (N,C)
+        z3 = np.matmul(a2,W2) + b2
+        #Softmax for class probabilities
+        a3 = np.exp(z3)/np.sum(np.exp(z3), axis = 1, keepdims = True)
+        #a_3 has the same shape as z_3
+        scores = a3 # shape is (N,C)
+        
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
         # If the targets are not given then jump out, we're done
@@ -109,12 +112,13 @@ class TwoLayerNet(object):
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         # Implement the loss for softmax output layer
 
-        # Using multidimensional array indexing to extract 
-        # softmax probability of the correct label for each sample.
+        # softmax probability of the correct label for each sample
         log_probs = np.log(scores[range(N),y])
         data_loss = (-1.0/N) * np.sum(log_probs)
-        L2_reg_loss = reg*(np.linalg.norm(W1,'fro') + np.linalg.norm(W2,'fro'))
-        loss = data_loss + L2_reg_loss
+        #Regulariser component of the loss
+        reg_loss = reg*(np.linalg.norm(W1,'fro')**2 + np.linalg.norm(W2,'fro')**2)
+        #Final loss
+        loss = data_loss + reg_loss
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
@@ -126,7 +130,33 @@ class TwoLayerNet(object):
         # grads['W1'] should store the gradient on W1, and be a matrix of same size #
         #############################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-        pass
+
+        #dz3: gradient of regularized loss w.r.t z3
+        # shape of dJ/dz3 is (N,C)
+        scores[range(N),y] -= 1
+        dz3 = (1.0/N)*scores # average of N training samples
+        
+        #dW2: gradient of regularized loss w.r.t W2
+        #Shape of dJ/dW2 is (H,C)
+        dW2 = np.dot(a2.T,dz3) + (2 * reg * W2)
+
+        #db2: gradient of regularized loss w.r.t b2 
+        #For N samples, it is sum of the elements of z3 along the first axis
+        db2 = np.sum(dz3, axis=0)
+      
+        #dW1 : gradient of regularized loss w.r.t W1
+        #Shape of dJ/dW1 is (D,H)
+        da2 = np.dot(dz3,W2.T)
+        # set gradient of units that did not activate to 0
+        da2[a2==0] = 0
+        dW1 = np.dot(X.T, da2) + (2 * reg * W1)
+
+        #db1: gradient of regularized loss w.r.t b1
+        #For N samples it is sum of the elemetns of da1 over the first axis
+        db1 = np.sum(da2, axis=0)
+
+        #Store the gradients
+        grads = {'W1': dW1, 'b1': db1, 'W2' : dW2, 'b2' : db2}
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
@@ -141,7 +171,7 @@ class TwoLayerNet(object):
 
         Inputs:
         - X: A numpy array of shape (N, D) giving training data.
-        - y: A numpy array f shape (N,) giving training labels; y[i] = c means that
+        - y: A numpy array of shape (N,) giving training labels; y[i] = c means that
           X[i] has label c, where 0 <= c < C.
         - X_val: A numpy array of shape (N_val, D) giving validation data.
         - y_val: A numpy array of shape (N_val,) giving validation labels.
@@ -162,15 +192,22 @@ class TwoLayerNet(object):
         val_acc_history = []
 
         for it in range(num_iters):
-            X_batch = X
-            y_batch = y
-
+            X_batch = None
+            y_batch = None
+            
             #########################################################################
             # TODO: Create a random minibatch of training data and labels, storing  #
             # them in X_batch and y_batch respectively.                             #
             #########################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-            pass
+
+            #Indices list for random subset of training samples
+            indx = []
+            for _ in range(batch_size):
+              indx.append(np.random.randint(0,num_train-1))
+
+            X_batch = X[indx]
+            y_batch = y[indx]
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
             # Compute loss and gradients using the current minibatch
@@ -185,8 +222,11 @@ class TwoLayerNet(object):
             #########################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-            pass
-
+            #Update step of SGD
+            self.params['W1'] -= learning_rate * grads['W1']
+            self.params['b1'] -= learning_rate * grads['b1']
+            self.params['W2'] -= learning_rate * grads['W2']            
+            self.params['b2'] -= learning_rate * grads['b2']
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
             if verbose and it % 100 == 0:
@@ -230,8 +270,14 @@ class TwoLayerNet(object):
         # TODO: Implement this function; it should be VERY simple!                #
         ###########################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
-        pass
+        
+        #forward pass for the validation set using the learned params
+        z2 = np.matmul(X,self.params['W1']) + self.params['b1']
+        a2 = np.maximum(0,z2)
+        z3 = np.matmul(a2,self.params['W2']) + self.params['b2']
+        a3 = np.exp(z3)/np.sum(np.exp(z3), axis = 1, keepdims = True)
+        y_pred = np.argmax(a3,axis=1)
+        
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
