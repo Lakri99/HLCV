@@ -2,9 +2,11 @@ import torch
 import torch.nn as nn
 import torchvision
 import torchvision.transforms as transforms
+# from torch.utils.tensorboard import SummaryWriter
 import sys
 
-torch.manual_seed(100)
+# torch.manual_seed(100)
+# writer = SummaryWriter('runs/Cifar-10-cnn')
 
 def weights_init(m):
     if type(m) == nn.Linear:
@@ -27,15 +29,16 @@ print('Using device: %s'%device)
 input_size = 32 * 32 * 3
 # hidden_size = [1541]
 hidden_size = [1034, 512]
+# hidden_size = [1034, 512, 256, 128]
 num_classes = 10
-num_epochs = 10
+num_epochs = 30
 batch_size = 256
 learning_rate = 1e-3
 learning_rate_decay = 0.95
 reg=0.001
 num_training= 49000
 num_validation =1000
-train = True
+train = False
 
 #-------------------------------------------------
 # Load the CIFAR-10 dataset
@@ -141,13 +144,14 @@ class MultiLayerPerceptron(nn.Module):
         )
 
 
-        layers.append(nn.Dropout(p=0.1))
+        layers.append(nn.Dropout(p=0.2))
         layers.append(nn.Linear(256*4*4, hidden_layers[0]))
+        # layers.append(nn.Linear(input_size, hidden_layers[0]))
         layers.append(nn.ReLU(inplace=True))
         for i in range(1, len(hidden_layers)):
             layers.append(nn.Linear(hidden_layers[i-1], hidden_layers[i]))
             layers.append(nn.ReLU(inplace=True))
-        layers.append(nn.Dropout(p=0.1))
+        layers.append(nn.Dropout(p=0.2))
         layers.append(nn.Linear(hidden_layers[-1], num_classes))
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
@@ -182,6 +186,8 @@ if train:
     # Train the model
     lr = learning_rate
     total_step = len(train_loader)
+
+    running_loss = 0.0
     for epoch in range(num_epochs):
         for i, (images, labels) in enumerate(train_loader):
             # Move tensors to the configured device
@@ -200,11 +206,16 @@ if train:
             loss = criterion(predicted, labels)
             loss.backward()
             optimizer.step()
+            # running_loss += loss.item()
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
             if (i+1) % 100 == 0:
                 print ('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}'
                        .format(epoch+1, num_epochs, i+1, total_step, loss.item()))
+                # writer.add_scalar('training loss',
+                #             running_loss / 1000,
+                #             epoch * total_step + i)
+                # running_loss = 0.0
 
         # Code to update the lr
         lr *= learning_rate_decay
@@ -227,8 +238,11 @@ if train:
                 # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
                 total += labels.size(0)
                 correct += (predicted == labels).sum().item()
-
-            print('Validataion accuracy is: {} %'.format(100 * correct / total))
+            acc = 100 * correct / total
+            print('Validataion accuracy is: {} %'.format(acc))
+            # writer.add_scalar('Validation Accuracy',
+            #                 acc,
+            #                 epoch * total_step + i)
 
     ##################################################################################
     # TODO: Now that you can train a simple two-layer MLP using above code, you can  #
@@ -251,7 +265,7 @@ else:
     # Run the test code once you have your by setting train flag to false
     # and loading the best model
 
-    best_model = None # torch.load()
+    best_model = torch.load('model.ckpt') # torch.load()
     model.load_state_dict(best_model)
     # Test the model
     # In test phase, we don't need to compute gradients (for memory efficiency)
