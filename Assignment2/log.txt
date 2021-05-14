@@ -1,0 +1,191 @@
+(lightning) root@8b02602e1f32:/home/HLCV# /root/miniconda3/envs/lightning/bin/python /home/HLCV/Assignment2/code/ex2_FCnet.py
+Your scores:
+[[0.3644621  0.22911264 0.40642526]
+ [0.47590629 0.17217039 0.35192332]
+ [0.43035767 0.26164229 0.30800004]
+ [0.41583127 0.2983228  0.28584593]
+ [0.36328815 0.32279939 0.31391246]]
+
+correct scores:
+[[0.3644621  0.22911264 0.40642526]
+ [0.47590629 0.17217039 0.35192332]
+ [0.43035767 0.26164229 0.30800004]
+ [0.41583127 0.2983228  0.28584593]
+ [0.36328815 0.32279939 0.31391246]]
+
+Difference between your scores and correct scores:
+2.917341143660046e-08
+Difference between your loss and correct loss:
+1.794120407794253e-13
+W1 max relative error: 3.561318e-09
+b1 max relative error: 1.125423e-09
+W2 max relative error: 3.440708e-09
+b2 max relative error: 3.865070e-11
+Final training loss:  0.017149607938732037
+Train data shape:  (49000, 3072)
+Train labels shape:  (49000,)
+Validation data shape:  (1000, 3072)
+Validation labels shape:  (1000,)
+Test data shape:  (1000, 3072)
+Test labels shape:  (1000,)
+iteration 0 / 1000: loss 2.302969
+iteration 100 / 1000: loss 2.302562
+iteration 200 / 1000: loss 2.299704
+iteration 300 / 1000: loss 2.269940
+iteration 400 / 1000: loss 2.175259
+iteration 500 / 1000: loss 2.132866
+iteration 600 / 1000: loss 2.069301
+iteration 700 / 1000: loss 2.041945
+iteration 800 / 1000: loss 1.935294
+iteration 900 / 1000: loss 2.019246
+Validation accuracy:  0.287
+iteration 0 / 1500: loss 2.303060
+iteration 100 / 1500: loss 1.942112
+iteration 200 / 1500: loss 1.819713
+iteration 300 / 1500: loss 1.701388
+iteration 400 / 1500: loss 1.558359
+iteration 500 / 1500: loss 1.608115
+iteration 600 / 1500: loss 1.540580
+iteration 700 / 1500: loss 1.469663
+iteration 800 / 1500: loss 1.476770
+iteration 900 / 1500: loss 1.538536
+iteration 1000 / 1500: loss 1.355389
+iteration 1100 / 1500: loss 1.428660
+iteration 1200 / 1500: loss 1.431367
+iteration 1300 / 1500: loss 1.470143
+iteration 1400 / 1500: loss 1.365156
+iteration 0 / 1500: loss 2.303281
+iteration 100 / 1500: loss 1.923517
+iteration 200 / 1500: loss 1.712701
+iteration 300 / 1500: loss 1.640869
+iteration 400 / 1500: loss 1.483465
+iteration 500 / 1500: loss 1.582022
+iteration 600 / 1500: loss 1.506928
+iteration 700 / 1500: loss 1.573348
+iteration 800 / 1500: loss 1.475113
+iteration 900 / 1500: loss 1.553513
+iteration 1000 / 1500: loss 1.392883
+iteration 1100 / 1500: loss 1.441309
+iteration 1200 / 1500: loss 1.368113
+iteration 1300 / 1500: loss 1.351814
+iteration 1400 / 1500: loss 1.394823
+iteration 0 / 2000: loss 2.303081
+iteration 100 / 2000: loss 1.986640
+iteration 200 / 2000: loss 1.742387
+iteration 300 / 2000: loss 1.690638
+iteration 400 / 2000: loss 1.502049
+iteration 500 / 2000: loss 1.580956
+iteration 600 / 2000: loss 1.666584
+iteration 700 / 2000: loss 1.599174
+iteration 800 / 2000: loss 1.494184
+iteration 900 / 2000: loss 1.517320
+iteration 1000 / 2000: loss 1.412312
+iteration 1100 / 2000: loss 1.405912
+iteration 1200 / 2000: loss 1.423127
+iteration 1300 / 2000: loss 1.443660
+iteration 1400 / 2000: loss 1.431838
+iteration 1500 / 2000: loss 1.410895
+iteration 1600 / 2000: loss 1.448517
+iteration 1700 / 2000: loss 1.367294
+iteration 1800 / 2000: loss 1.440278
+iteration 1900 / 2000: loss 1.407137
+iteration 0 / 2000: loss 2.303276
+iteration 100 / 2000: loss 1.884005
+iteration 200 / 2000: loss 1.714684
+iteration 300 / 2000: loss 1.610715
+iteration 400 / 2000: loss 1.634699
+iteration 500 / 2000: loss 1.620726
+iteration 600 / 2000: loss 1.657891
+iteration 700 / 2000: loss 1.505946
+iteration 800 / 2000: loss 1.536119
+iteration 900 / 2000: loss 1.543852
+iteration 1000 / 2000: loss 1.372872
+iteration 1100 / 2000: loss 1.394350
+iteration 1200 / 2000: loss 1.415658
+iteration 1300 / 2000: loss 1.431220
+iteration 1400 / 2000: loss 1.513914
+iteration 1500 / 2000: loss 1.378604
+iteration 1600 / 2000: loss 1.438161
+iteration 1700 / 2000: loss 1.290853
+iteration 1800 / 2000: loss 1.427917
+iteration 1900 / 2000: loss 1.282557
+iteration 0 / 1500: loss 2.303180
+iteration 100 / 1500: loss 1.889796
+iteration 200 / 1500: loss 1.787047
+iteration 300 / 1500: loss 1.798607
+iteration 400 / 1500: loss 1.750826
+iteration 500 / 1500: loss 1.583954
+iteration 600 / 1500: loss 1.587692
+iteration 700 / 1500: loss 1.533447
+iteration 800 / 1500: loss 1.558897
+iteration 900 / 1500: loss 1.478744
+iteration 1000 / 1500: loss 1.502228
+iteration 1100 / 1500: loss 1.458474
+iteration 1200 / 1500: loss 1.465284
+iteration 1300 / 1500: loss 1.384411
+iteration 1400 / 1500: loss 1.397302
+iteration 0 / 1500: loss 2.303571
+iteration 100 / 1500: loss 1.938115
+iteration 200 / 1500: loss 1.713651
+iteration 300 / 1500: loss 1.672961
+iteration 400 / 1500: loss 1.572336
+iteration 500 / 1500: loss 1.537847
+iteration 600 / 1500: loss 1.545498
+iteration 700 / 1500: loss 1.633436
+iteration 800 / 1500: loss 1.477876
+iteration 900 / 1500: loss 1.502265
+iteration 1000 / 1500: loss 1.411075
+iteration 1100 / 1500: loss 1.545511
+iteration 1200 / 1500: loss 1.339645
+iteration 1300 / 1500: loss 1.396718
+iteration 1400 / 1500: loss 1.441580
+iteration 0 / 2000: loss 2.303176
+iteration 100 / 2000: loss 1.933310
+iteration 200 / 2000: loss 1.778674
+iteration 300 / 2000: loss 1.664101
+iteration 400 / 2000: loss 1.739181
+iteration 500 / 2000: loss 1.607354
+iteration 600 / 2000: loss 1.502113
+iteration 700 / 2000: loss 1.641508
+iteration 800 / 2000: loss 1.475803
+iteration 900 / 2000: loss 1.409392
+iteration 1000 / 2000: loss 1.536755
+iteration 1100 / 2000: loss 1.532678
+iteration 1200 / 2000: loss 1.450424
+iteration 1300 / 2000: loss 1.387102
+iteration 1400 / 2000: loss 1.413781
+iteration 1500 / 2000: loss 1.395101
+iteration 1600 / 2000: loss 1.403090
+iteration 1700 / 2000: loss 1.405116
+iteration 1800 / 2000: loss 1.440882
+iteration 1900 / 2000: loss 1.444441
+iteration 0 / 2000: loss 2.303512
+iteration 100 / 2000: loss 1.898741
+iteration 200 / 2000: loss 1.751155
+iteration 300 / 2000: loss 1.749441
+iteration 400 / 2000: loss 1.560693
+iteration 500 / 2000: loss 1.685913
+iteration 600 / 2000: loss 1.492119
+iteration 700 / 2000: loss 1.497576
+iteration 800 / 2000: loss 1.684012
+iteration 900 / 2000: loss 1.522414
+iteration 1000 / 2000: loss 1.548910
+iteration 1100 / 2000: loss 1.376072
+iteration 1200 / 2000: loss 1.396614
+iteration 1300 / 2000: loss 1.342159
+iteration 1400 / 2000: loss 1.494816
+iteration 1500 / 2000: loss 1.422417
+iteration 1600 / 2000: loss 1.495047
+iteration 1700 / 2000: loss 1.481363
+iteration 1800 / 2000: loss 1.419037
+iteration 1900 / 2000: loss 1.401368
+lr 1.000000e-03 reg 0.150000 iters 1500 hidden_nodes: 100 training accuracy: 0.533857 validation accuracy: 0.506000
+lr 1.000000e-03 reg 0.200000 iters 1500 hidden_nodes: 100 training accuracy: 0.528041 validation accuracy: 0.479000
+lr 1.000000e-03 reg 0.150000 iters 1500 hidden_nodes: 150 training accuracy: 0.538122 validation accuracy: 0.493000
+lr 1.000000e-03 reg 0.200000 iters 1500 hidden_nodes: 150 training accuracy: 0.543878 validation accuracy: 0.517000
+lr 1.000000e-03 reg 0.150000 iters 2000 hidden_nodes: 100 training accuracy: 0.555122 validation accuracy: 0.524000
+lr 1.000000e-03 reg 0.200000 iters 2000 hidden_nodes: 100 training accuracy: 0.549939 validation accuracy: 0.517000
+lr 1.000000e-03 reg 0.150000 iters 2000 hidden_nodes: 150 training accuracy: 0.557918 validation accuracy: 0.498000
+lr 1.000000e-03 reg 0.200000 iters 2000 hidden_nodes: 150 training accuracy: 0.562531 validation accuracy: 0.519000
+Best Validation accuracy achieved : 0.524000
+Test accuracy:  0.51

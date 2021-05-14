@@ -146,6 +146,7 @@ plt.xlabel('iteration')
 plt.ylabel('training loss')
 plt.title('Training Loss history')
 plt.show()
+plt.savefig('Q2a.jpg')
 
 
 # # Load the data
@@ -220,6 +221,7 @@ ax2.legend()
 
 figure.tight_layout()
 plt.show()
+plt.savefig('q2.jpg')
 
 
 # Visualize the weights of the network
@@ -286,14 +288,14 @@ for i in range(len(hyperparam_list)):
 
     exp_net = TwoLayerNet(input_size, hidden_size, num_classes)
     #Network training
-    exp_stats = net.train(X_train, y_train, X_val, y_val,
+    exp_stats = exp_net.train(X_train, y_train, X_val, y_val,
                          num_iters=no_iters, batch_size=200,
                         learning_rate=lr, learning_rate_decay=0.95,
                         reg=reg_strength, verbose=True)
 
     # Calculate Validation accuracy and training accuracy
-    train_acc = (net.predict(X_train) == y_train).mean()
-    valacc = (net.predict(X_val) == y_val).mean()
+    train_acc = (exp_net.predict(X_train) == y_train).mean()
+    valacc = (exp_net.predict(X_val) == y_val).mean()
 
     #store the results
     results[(no_iters,hidden_size,reg_strength)] = (train_acc, valacc)
@@ -326,7 +328,7 @@ for i in range(len(hyperparam_list)):
     
 for num_iters, nodes, reg in sorted(results):
     trainacc, valacc = results[(num_iters,nodes,reg)]
-    print('lr %e reg %f iters %d hidden_nodes: %d validation accuracy: %f'% (lr, reg, num_iters,nodes,trainacc,valacc))
+    print('lr %e reg %f iters %d hidden_nodes: %d training accuracy: %f validation accuracy: %f'% (lr, reg, num_iters,nodes,trainacc,valacc))
 
 print('Best Validation accuracy achieved : %f'%best_valacc)
 
