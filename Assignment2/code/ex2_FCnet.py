@@ -146,7 +146,6 @@ plt.xlabel('iteration')
 plt.ylabel('training loss')
 plt.title('Training Loss history')
 plt.show()
-plt.savefig('Q2a.jpg')
 
 
 # # Load the data
@@ -221,7 +220,6 @@ ax2.legend()
 
 figure.tight_layout()
 plt.show()
-plt.savefig('q2.jpg')
 
 
 # Visualize the weights of the network
