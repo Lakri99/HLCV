@@ -201,19 +201,24 @@ print('Validation accuracy: ', val_acc)
 # first layer weights typically show some visible structure when visualized.
 
 # Plot the loss function and train / validation accuracies
-plt.subplot(2, 1, 1)
-plt.plot(stats['loss_history'])
-plt.title('Loss history')
-plt.xlabel('Iteration')
-plt.ylabel('Loss')
 
-plt.subplot(2, 1, 2)
-plt.plot(stats['train_acc_history'], label='train')
-plt.plot(stats['val_acc_history'], label='val')
-plt.title('Classification accuracy history')
-plt.xlabel('Epoch')
-plt.ylabel('Classification accuracy')
-plt.legend()
+#Fixing the space between the 2 subplots
+figure, (ax1,ax2) =  plt.subplots(2,1)
+
+ax1.plot(stats['loss_history'])
+ax1.set_title('Loss history')
+ax1.set_xlabel('Iteration')
+ax1.set_ylabel('Loss')
+
+
+ax2.plot(stats['train_acc_history'], label='train')
+ax2.plot(stats['val_acc_history'], label='val')
+ax2.set_title('Classification accuracy history')
+ax2.set_xlabel('Epoch')
+ax2.set_ylabel('Classification accuracy')
+ax2.legend()
+
+figure.tight_layout()
 plt.show()
 
 
@@ -264,8 +269,67 @@ best_net = None # store the best model into this
 # write code to sweep through possible combinations of hyperparameters          #
 #################################################################################
 # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+lr = 1e-3 # learning rate
+regs = [0.15,0.2] # regularization strength
+itrs = [1500,2000] # iterations of SGD
+hidden_size = [100,150]
+best_valacc = 0
+results = {}
 
-pass
+hyperparam_list = np.array(np.meshgrid(itrs,hidden_size,regs)).T.reshape(-1,3) 
+
+for i in range(len(hyperparam_list)):
+
+    hidden_size = int(hyperparam_list[i][1])
+    no_iters = int(hyperparam_list[i][0])
+    reg_strength = hyperparam_list[i][2]
+
+    exp_net = TwoLayerNet(input_size, hidden_size, num_classes)
+    #Network training
+    exp_stats = net.train(X_train, y_train, X_val, y_val,
+                         num_iters=no_iters, batch_size=200,
+                        learning_rate=lr, learning_rate_decay=0.95,
+                        reg=reg_strength, verbose=True)
+
+    # Calculate Validation accuracy and training accuracy
+    train_acc = (net.predict(X_train) == y_train).mean()
+    valacc = (net.predict(X_val) == y_val).mean()
+
+    #store the results
+    results[(no_iters,hidden_size,reg_strength)] = (train_acc, valacc)
+    
+    
+    #Store the best accuracy on the validation set and corresponding model weights
+    if valacc > best_valacc:
+        best_valacc = valacc
+        best_net = exp_net
+
+    figure, (ax1,ax2) =  plt.subplots(2,1)
+    ax1.plot(exp_stats['loss_history'])
+    ax1.set_title('Loss history')
+    ax1.set_xlabel('Iteration')
+    ax1.set_ylabel('Loss')
+
+    ax2.plot(exp_stats['train_acc_history'], label='train')
+    ax2.plot(exp_stats['val_acc_history'], label='val')
+    ax2.text(0.6, 0.3, 'nodes = {}, reg = {}, num_iters ={}'.format(hidden_size,reg_strength,no_iters),
+            bbox=dict(facecolor='red', alpha=0.5),verticalalignment='top', horizontalalignment='right', 
+            transform=ax2.transAxes,color='green', fontsize='x-small')
+    ax2.set_title('Classification accuracy history')
+    ax2.set_xlabel('Epoch')
+    ax2.set_ylabel('Classification accuracy')
+    ax2.legend()
+
+    figure.tight_layout()
+    #plt.show()
+    plt.savefig('Plot for nodes_{}_reg_{}_num_iters_{}.jpg'.format(hidden_size,reg_strength,no_iters))   
+    
+for num_iters, nodes, reg in sorted(results):
+    trainacc, valacc = results[(num_iters,nodes,reg)]
+    print('lr %e reg %f iters %d hidden_nodes: %d validation accuracy: %f'% (lr, reg, num_iters,nodes,trainacc,valacc))
+
+print('Best Validation accuracy achieved : %f'%best_valacc)
+
 # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
 # visualize the weights of the best network

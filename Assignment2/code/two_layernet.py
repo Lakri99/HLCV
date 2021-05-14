@@ -91,8 +91,15 @@ class TwoLayerNet(object):
         #Shape of z_3 = (N,H) X (H,C) = (N,C)
         z3 = np.matmul(a2,W2) + b2
         #Softmax for class probabilities
-        a3 = np.exp(z3)/np.sum(np.exp(z3), axis = 1, keepdims = True)
-        #a_3 has the same shape as z_3
+        #a3 = np.exp(z3)/np.sum(np.exp(z3), axis = 1, keepdims = True)
+
+        #observed overflow errors while doing experiments with hyperparameter tuning
+        #Found a stable version of softmax for Avoiding underflow or overflow errors 
+        #due to floating point instability 
+        #Source : https://cs231n.github.io/linear-classify/#softmax
+        z3 -=np.max(z3)
+        a3 = np.exp(z3)/np.sum(np.exp(z3),axis = 1, keepdims = True)
+        #Update scores variable
         scores = a3 # shape is (N,C)
         
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
@@ -191,6 +198,7 @@ class TwoLayerNet(object):
         train_acc_history = []
         val_acc_history = []
 
+
         for it in range(num_iters):
             X_batch = None
             y_batch = None
@@ -202,10 +210,14 @@ class TwoLayerNet(object):
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
             #Indices list for random subset of training samples
-            indx = []
-            for _ in range(batch_size):
-              indx.append(np.random.randint(0,num_train-1))
+            if len(X) != len(X_val):
+              #Each index is picked once in the batch
+              indx = np.random.choice(num_train, batch_size, replace=False)
+            else:
+              #For toy model
+               indx = np.random.choice(num_train, batch_size)
 
+            #Training batch and their lablels   
             X_batch = X[indx]
             y_batch = y[indx]
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
@@ -278,7 +290,6 @@ class TwoLayerNet(object):
         a3 = np.exp(z3)/np.sum(np.exp(z3), axis = 1, keepdims = True)
         y_pred = np.argmax(a3,axis=1)
         
-
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
         return y_pred
