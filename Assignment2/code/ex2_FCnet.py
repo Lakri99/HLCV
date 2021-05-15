@@ -304,25 +304,25 @@ for i in range(len(hyperparam_list)):
         best_valacc = valacc
         best_net = exp_net
 
-    figure, (ax1,ax2) =  plt.subplots(2,1)
-    ax1.plot(exp_stats['loss_history'])
-    ax1.set_title('Loss history')
-    ax1.set_xlabel('Iteration')
-    ax1.set_ylabel('Loss')
+    #Plots training loss and validation accuracy
+    fig, (axes1,axes2) =  plt.subplots(2,1)
+    axes1.plot(exp_stats['loss_history'])
+    axes1.set_title('Loss history')
+    axes1.set_xlabel('Iteration')
+    axes1.set_ylabel('Loss')
 
-    ax2.plot(exp_stats['train_acc_history'], label='train')
-    ax2.plot(exp_stats['val_acc_history'], label='val')
-    ax2.text(0.6, 0.3, 'nodes = {}, reg = {}, num_iters ={}'.format(hidden_size,reg_strength,no_iters),
+    axes2.plot(exp_stats['train_acc_history'], label='train')
+    axes2.plot(exp_stats['val_acc_history'], label='val')
+    axes2.text(0.6, 0.3, 'nodes = {}, reg = {}, num_iters ={}'.format(hidden_size,reg_strength,no_iters),
             bbox=dict(facecolor='red', alpha=0.5),verticalalignment='top', horizontalalignment='right', 
-            transform=ax2.transAxes,color='green', fontsize='x-small')
-    ax2.set_title('Classification accuracy history')
-    ax2.set_xlabel('Epoch')
-    ax2.set_ylabel('Classification accuracy')
-    ax2.legend()
+            transform=axes2.transAxes,color='green', fontsize='x-small')
+    axes2.set_title('Classification accuracy history')
+    axes2.set_xlabel('Epoch')
+    axes2.set_ylabel('Classification accuracy')
+    axes2.legend()
 
-    figure.tight_layout()
-    #plt.show()
-    plt.savefig('Plot for nodes_{}_reg_{}_num_iters_{}.jpg'.format(hidden_size,reg_strength,no_iters))   
+    fig.tight_layout()
+    plt.show()
     
 for num_iters, nodes, reg in sorted(results):
     trainacc, valacc = results[(num_iters,nodes,reg)]
