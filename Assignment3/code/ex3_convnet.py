@@ -104,16 +104,27 @@ class ConvNet(nn.Module):
         #################################################################################
         layers = []
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
+        layers.append(nn.Conv2d(in_channels=3, out_channels=hidden_layers[0], kernel_size=3, padding=1))
+        layers.append(nn.ReLU(inplace=True))
+        layers.append(nn.MaxPool2d(kernel_size=2, stride=2))
+        for i in range(1, len(hidden_layers)-1):
+            layers.append(nn.Conv2d(in_channels=hidden_layers[i-1], out_channels=hidden_layers[i], kernel_size=3, padding=1))
+            layers.append(nn.ReLU(inplace=True))
+            layers.append(nn.MaxPool2d(kernel_size=2, stride=2))
+        layers.append(nn.Flatten())
+        layers.append(nn.Linear(512, num_classes))
+        self.conv_layer = nn.Sequential(*layers)
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
+        
     def forward(self, x):
         #################################################################################
         # TODO: Implement the forward pass computations                                 #
         #################################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
+        out = self.conv_layer(x)
+        # print(out.shape)
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         return out
@@ -148,7 +159,7 @@ def VisualizeFilter(model):
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
+    pass
 #======================================================================================
 # Q1.a: Implementing convolutional neural net in PyTorch
 #======================================================================================
@@ -165,12 +176,12 @@ print(model)
 #======================================================================================
 # Q1.b: Implementing the function to count the number of trainable parameters in the model
 #======================================================================================
-PrintModelSize(model)
+# PrintModelSize(model)
 #======================================================================================
 # Q1.a: Implementing the function to visualize the filters in the first conv layers.
 # Visualize the filters before training
 #======================================================================================
-VisualizeFilter(model)
+# VisualizeFilter(model)
 
 
 # Loss and optimizer
