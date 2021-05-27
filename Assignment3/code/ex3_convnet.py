@@ -141,8 +141,16 @@ def PrintModelSize(model, disp=True):
     # training                                                                      #
     #################################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+    print("------------------------------------------------------------------")
+    print("Parameters name \t" + "Parameter size \n")
+    print("------------------------------------------------------------------")
+    model_sz = 0
+    for name, p in model.named_parameters():
+        if p.requires_grad:
+            print(name,"\t", p.nelement())
+            model_sz += int(p.nelement())
 
-
+    print("Total number of trainable parameters: ", model_sz)
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     return model_sz
 
