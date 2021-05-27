@@ -93,7 +93,7 @@ test_loader = torch.utils.data.DataLoader(dataset=test_dataset,
 # Set norm_layer for different networks whether using batch normalization
 #-------------------------------------------------
 class ConvNet(nn.Module):
-    def __init__(self, input_size, hidden_layers, num_classes, norm_layer=None):
+    def __init__(self, input_size, hidden_layers, num_classes, norm_layer=None, dropout_value=.1):
         super(ConvNet, self).__init__()
         #################################################################################
         # TODO: Initialize the modules required to implement the convolutional layer    #
@@ -105,12 +105,17 @@ class ConvNet(nn.Module):
         layers = []
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         layers.append(nn.Conv2d(in_channels=3, out_channels=hidden_layers[0], kernel_size=3, padding=1))
-        layers.append(nn.ReLU(inplace=True))
+        layers.append(nn.BatchNorm2d(hidden_layers[0]))
         layers.append(nn.MaxPool2d(kernel_size=2, stride=2))
+        layers.append(nn.ReLU(inplace=True))
+        layers.append(nn.Dropout(p=dropout_value))
         for i in range(1, len(hidden_layers)-1):
             layers.append(nn.Conv2d(in_channels=hidden_layers[i-1], out_channels=hidden_layers[i], kernel_size=3, padding=1))
-            layers.append(nn.ReLU(inplace=True))
+            layers.append(nn.BatchNorm2d(hidden_layers[i]))
             layers.append(nn.MaxPool2d(kernel_size=2, stride=2))
+            layers.append(nn.ReLU(inplace=True))
+            if i<len(hidden_layers)-2:
+              layers.append(nn.Dropout(p=dropout_value))
         layers.append(nn.Flatten())
         layers.append(nn.Linear(512, num_classes))
         self.conv_layer = nn.Sequential(*layers)
@@ -128,7 +133,6 @@ class ConvNet(nn.Module):
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         return out
-
 
 #-------------------------------------------------
 # Calculate the model size (Q1.b)
@@ -160,6 +164,7 @@ def VisualizeFilter(model):
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     pass
+
 #======================================================================================
 # Q1.a: Implementing convolutional neural net in PyTorch
 #======================================================================================
@@ -176,12 +181,12 @@ print(model)
 #======================================================================================
 # Q1.b: Implementing the function to count the number of trainable parameters in the model
 #======================================================================================
-# PrintModelSize(model)
+PrintModelSize(model)
 #======================================================================================
 # Q1.a: Implementing the function to visualize the filters in the first conv layers.
 # Visualize the filters before training
 #======================================================================================
-# VisualizeFilter(model)
+VisualizeFilter(model)
 
 
 # Loss and optimizer
@@ -191,6 +196,7 @@ optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate, weight_decay=
 # Train the model
 lr = learning_rate
 total_step = len(train_loader)
+val_loss = []
 for epoch in range(num_epochs):
     for i, (images, labels) in enumerate(train_loader):
         # Move tensors to the configured device
@@ -233,6 +239,8 @@ for epoch in range(num_epochs):
         #################################################################################
         best_model = None
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+        val_loss.append(criterion(outputs,labels).item())
+        print('Validataion loss is: {:.4f}'.format(criterion(outputs,labels).item()))
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
@@ -268,5 +276,4 @@ with torch.no_grad():
 VisualizeFilter(model)
 # Save the model checkpoint
 torch.save(model.state_dict(), 'model.ckpt')
-
 
