@@ -169,6 +169,18 @@ def VisualizeFilter(model):
     # You can use matlplotlib.imshow to visualize an image in python                #
     #################################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+    # import pdb; pdb.set_trace()
+    fig = plt.figure(figsize=(10, 7))
+    kernels = model.conv_layer[0].weight.data.cpu().numpy()
+    for i in range(16*8):
+        fig.add_subplot(8, 16, i+1)
+        img = kernels[i, ...]
+        img = img - img.min()
+        img = img / img.max()
+        plt.imshow(img)
+        plt.xticks([])
+        plt.yticks([])
+    plt.show()
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     pass
