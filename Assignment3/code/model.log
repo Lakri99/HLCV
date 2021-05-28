@@ -39,6 +39,7 @@ conv_layer.12.bias       512
 conv_layer.16.weight     5120
 conv_layer.16.bias       10
 Total number of trainable parameters:  7678474
+
 Epoch [1/20], Step [100/245], Loss: 1.6450
 Epoch [1/20], Step [200/245], Loss: 1.2501
 Validataion accuracy is: 55.5 %
@@ -120,3 +121,673 @@ Epoch [20/20], Step [200/245], Loss: 0.1249
 Validataion accuracy is: 80.1 %
 Validataion loss is: 0.8511
 Accuracy of the network on the 1000 test images: 80.9 %
+
+
+dropouts:
+Using device: cuda
+[128, 512, 512, 512, 512, 512]
+ConvNet(
+  (conv_layer): Sequential(
+    (0): Conv2d(3, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (3): ReLU(inplace=True)
+    (4): Dropout(p=0.1, inplace=False)
+    (5): Conv2d(128, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (6): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (7): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (8): ReLU(inplace=True)
+    (9): Dropout(p=0.1, inplace=False)
+    (10): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (11): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (12): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (13): ReLU(inplace=True)
+    (14): Dropout(p=0.1, inplace=False)
+    (15): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (16): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (17): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (18): ReLU(inplace=True)
+    (19): Dropout(p=0.1, inplace=False)
+    (20): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (21): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (22): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (23): ReLU(inplace=True)
+    (24): Flatten(start_dim=1, end_dim=-1)
+    (25): Linear(in_features=512, out_features=10, bias=True)
+  )
+)
+------------------------------------------------------------------
+Parameters name 	Parameter size 
+
+------------------------------------------------------------------
+conv_layer.0.weight 	 3456
+conv_layer.0.bias 	 128
+conv_layer.1.weight 	 128
+conv_layer.1.bias 	 128
+conv_layer.5.weight 	 589824
+conv_layer.5.bias 	 512
+conv_layer.6.weight 	 512
+conv_layer.6.bias 	 512
+conv_layer.10.weight 	 2359296
+conv_layer.10.bias 	 512
+conv_layer.11.weight 	 512
+conv_layer.11.bias 	 512
+conv_layer.15.weight 	 2359296
+conv_layer.15.bias 	 512
+conv_layer.16.weight 	 512
+conv_layer.16.bias 	 512
+conv_layer.20.weight 	 2359296
+conv_layer.20.bias 	 512
+conv_layer.21.weight 	 512
+conv_layer.21.bias 	 512
+conv_layer.25.weight 	 5120
+conv_layer.25.bias 	 10
+Total number of trainable parameters:  7682826
+Epoch [1/15], Step [100/245], Loss: 1.3809
+Epoch [1/15], Step [200/245], Loss: 1.2327
+Training accuracy is: 48.3102 %
+Validataion accuracy is: 48.2 %
+Validataion loss is: 1.3581
+Epoch [2/15], Step [100/245], Loss: 0.9444
+Epoch [2/15], Step [200/245], Loss: 0.7460
+Training accuracy is: 65.6102 %
+Validataion accuracy is: 67.9 %
+Validataion loss is: 0.8745
+Epoch [3/15], Step [100/245], Loss: 0.8162
+Epoch [3/15], Step [200/245], Loss: 0.7773
+Training accuracy is: 71.4327 %
+Validataion accuracy is: 67.7 %
+Validataion loss is: 0.8547
+Epoch [4/15], Step [100/245], Loss: 0.7240
+Epoch [4/15], Step [200/245], Loss: 0.6204
+Training accuracy is: 75.0694 %
+Validataion accuracy is: 71.2 %
+Validataion loss is: 0.7750
+Epoch [5/15], Step [100/245], Loss: 0.7151
+Epoch [5/15], Step [200/245], Loss: 0.5398
+Training accuracy is: 77.8265 %
+Validataion accuracy is: 79.3 %
+Validataion loss is: 0.6129
+Epoch [6/15], Step [100/245], Loss: 0.5366
+Epoch [6/15], Step [200/245], Loss: 0.5766
+Training accuracy is: 79.8633 %
+Validataion accuracy is: 78.6 %
+Validataion loss is: 0.5608
+Epoch [7/15], Step [100/245], Loss: 0.5947
+Epoch [7/15], Step [200/245], Loss: 0.4567
+Training accuracy is: 81.5306 %
+Validataion accuracy is: 79.3 %
+Validataion loss is: 0.5069
+Epoch [8/15], Step [100/245], Loss: 0.4880
+Epoch [8/15], Step [200/245], Loss: 0.5599
+Training accuracy is: 83.0265 %
+Validataion accuracy is: 78.7 %
+Validataion loss is: 0.6351
+Epoch [9/15], Step [100/245], Loss: 0.3589
+Epoch [9/15], Step [200/245], Loss: 0.4877
+Training accuracy is: 84.5980 %
+Validataion accuracy is: 79.1 %
+Validataion loss is: 0.5996
+Epoch [10/15], Step [100/245], Loss: 0.3915
+Epoch [10/15], Step [200/245], Loss: 0.3874
+Training accuracy is: 85.6918 %
+Validataion accuracy is: 78.6 %
+Validataion loss is: 0.6270
+Epoch [11/15], Step [100/245], Loss: 0.3617
+Epoch [11/15], Step [200/245], Loss: 0.3837
+Training accuracy is: 87.0633 %
+Validataion accuracy is: 82.2 %
+Validataion loss is: 0.4833
+Epoch [12/15], Step [100/245], Loss: 0.4054
+Epoch [12/15], Step [200/245], Loss: 0.3949
+Training accuracy is: 87.4939 %
+Validataion accuracy is: 83.1 %
+Validataion loss is: 0.5168
+Epoch [13/15], Step [100/245], Loss: 0.2838
+Epoch [13/15], Step [200/245], Loss: 0.4270
+Training accuracy is: 88.5510 %
+Validataion accuracy is: 80.8 %
+Validataion loss is: 0.5242
+Epoch [14/15], Step [100/245], Loss: 0.2561
+Epoch [14/15], Step [200/245], Loss: 0.4270
+Training accuracy is: 89.4000 %
+Validataion accuracy is: 83.1 %
+Validataion loss is: 0.4538
+Epoch [15/15], Step [100/245], Loss: 0.3552
+Epoch [15/15], Step [200/245], Loss: 0.3878
+Training accuracy is: 90.1143 %
+Validataion accuracy is: 82.9 %
+Validataion loss is: 0.4728
+90.11428571428571
+ConvNet(
+  (conv_layer): Sequential(
+    (0): Conv2d(3, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (3): ReLU(inplace=True)
+    (4): Dropout(p=0.3, inplace=False)
+    (5): Conv2d(128, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (6): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (7): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (8): ReLU(inplace=True)
+    (9): Dropout(p=0.3, inplace=False)
+    (10): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (11): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (12): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (13): ReLU(inplace=True)
+    (14): Dropout(p=0.3, inplace=False)
+    (15): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (16): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (17): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (18): ReLU(inplace=True)
+    (19): Dropout(p=0.3, inplace=False)
+    (20): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (21): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (22): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (23): ReLU(inplace=True)
+    (24): Flatten(start_dim=1, end_dim=-1)
+    (25): Linear(in_features=512, out_features=10, bias=True)
+  )
+)
+------------------------------------------------------------------
+Parameters name 	Parameter size 
+
+------------------------------------------------------------------
+conv_layer.0.weight 	 3456
+conv_layer.0.bias 	 128
+conv_layer.1.weight 	 128
+conv_layer.1.bias 	 128
+conv_layer.5.weight 	 589824
+conv_layer.5.bias 	 512
+conv_layer.6.weight 	 512
+conv_layer.6.bias 	 512
+conv_layer.10.weight 	 2359296
+conv_layer.10.bias 	 512
+conv_layer.11.weight 	 512
+conv_layer.11.bias 	 512
+conv_layer.15.weight 	 2359296
+conv_layer.15.bias 	 512
+conv_layer.16.weight 	 512
+conv_layer.16.bias 	 512
+conv_layer.20.weight 	 2359296
+conv_layer.20.bias 	 512
+conv_layer.21.weight 	 512
+conv_layer.21.bias 	 512
+conv_layer.25.weight 	 5120
+conv_layer.25.bias 	 10
+Total number of trainable parameters:  7682826
+Epoch [1/15], Step [100/245], Loss: 1.3550
+Epoch [1/15], Step [200/245], Loss: 1.1294
+Training accuracy is: 45.3041 %
+Validataion accuracy is: 39.9 %
+Validataion loss is: 1.6422
+Epoch [2/15], Step [100/245], Loss: 1.0049
+Epoch [2/15], Step [200/245], Loss: 1.1710
+Training accuracy is: 63.6061 %
+Validataion accuracy is: 61.4 %
+Validataion loss is: 1.0764
+Epoch [3/15], Step [100/245], Loss: 0.7713
+Epoch [3/15], Step [200/245], Loss: 0.8156
+Training accuracy is: 68.5633 %
+Validataion accuracy is: 67.8 %
+Validataion loss is: 0.8965
+Epoch [4/15], Step [100/245], Loss: 0.8440
+Epoch [4/15], Step [200/245], Loss: 0.8834
+Training accuracy is: 71.5490 %
+Validataion accuracy is: 67.7 %
+Validataion loss is: 0.9524
+Epoch [5/15], Step [100/245], Loss: 0.7555
+Epoch [5/15], Step [200/245], Loss: 0.6797
+Training accuracy is: 73.6980 %
+Validataion accuracy is: 74.1 %
+Validataion loss is: 0.7541
+Epoch [6/15], Step [100/245], Loss: 0.7248
+Epoch [6/15], Step [200/245], Loss: 0.7075
+Training accuracy is: 75.4143 %
+Validataion accuracy is: 75.3 %
+Validataion loss is: 0.6871
+Epoch [7/15], Step [100/245], Loss: 0.7669
+Epoch [7/15], Step [200/245], Loss: 0.7075
+Training accuracy is: 76.5633 %
+Validataion accuracy is: 76.0 %
+Validataion loss is: 0.6558
+Epoch [8/15], Step [100/245], Loss: 0.6122
+Epoch [8/15], Step [200/245], Loss: 0.6262
+Training accuracy is: 77.9224 %
+Validataion accuracy is: 77.3 %
+Validataion loss is: 0.5478
+Epoch [9/15], Step [100/245], Loss: 0.5699
+Epoch [9/15], Step [200/245], Loss: 0.7267
+Training accuracy is: 78.8204 %
+Validataion accuracy is: 79.7 %
+Validataion loss is: 0.5958
+Epoch [10/15], Step [100/245], Loss: 0.6244
+Epoch [10/15], Step [200/245], Loss: 0.5361
+Training accuracy is: 79.5000 %
+Validataion accuracy is: 77.8 %
+Validataion loss is: 0.6163
+Epoch [11/15], Step [100/245], Loss: 0.6055
+Epoch [11/15], Step [200/245], Loss: 0.5953
+Training accuracy is: 80.7408 %
+Validataion accuracy is: 78.5 %
+Validataion loss is: 0.5739
+Epoch [12/15], Step [100/245], Loss: 0.4440
+Epoch [12/15], Step [200/245], Loss: 0.5564
+Training accuracy is: 81.3102 %
+Validataion accuracy is: 82.8 %
+Validataion loss is: 0.4855
+Epoch [13/15], Step [100/245], Loss: 0.5585
+Epoch [13/15], Step [200/245], Loss: 0.4808
+Training accuracy is: 81.8286 %
+Validataion accuracy is: 81.6 %
+Validataion loss is: 0.5261
+Epoch [14/15], Step [100/245], Loss: 0.5258
+Epoch [14/15], Step [200/245], Loss: 0.4286
+Training accuracy is: 82.6429 %
+Validataion accuracy is: 82.5 %
+Validataion loss is: 0.5115
+Epoch [15/15], Step [100/245], Loss: 0.5040
+Epoch [15/15], Step [200/245], Loss: 0.6001
+Training accuracy is: 83.4673 %
+Validataion accuracy is: 80.9 %
+Validataion loss is: 0.5426
+83.4673469387755
+ConvNet(
+  (conv_layer): Sequential(
+    (0): Conv2d(3, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (3): ReLU(inplace=True)
+    (4): Dropout(p=0.5, inplace=False)
+    (5): Conv2d(128, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (6): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (7): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (8): ReLU(inplace=True)
+    (9): Dropout(p=0.5, inplace=False)
+    (10): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (11): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (12): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (13): ReLU(inplace=True)
+    (14): Dropout(p=0.5, inplace=False)
+    (15): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (16): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (17): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (18): ReLU(inplace=True)
+    (19): Dropout(p=0.5, inplace=False)
+    (20): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (21): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (22): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (23): ReLU(inplace=True)
+    (24): Flatten(start_dim=1, end_dim=-1)
+    (25): Linear(in_features=512, out_features=10, bias=True)
+  )
+)
+------------------------------------------------------------------
+Parameters name 	Parameter size 
+
+------------------------------------------------------------------
+conv_layer.0.weight 	 3456
+conv_layer.0.bias 	 128
+conv_layer.1.weight 	 128
+conv_layer.1.bias 	 128
+conv_layer.5.weight 	 589824
+conv_layer.5.bias 	 512
+conv_layer.6.weight 	 512
+conv_layer.6.bias 	 512
+conv_layer.10.weight 	 2359296
+conv_layer.10.bias 	 512
+conv_layer.11.weight 	 512
+conv_layer.11.bias 	 512
+conv_layer.15.weight 	 2359296
+conv_layer.15.bias 	 512
+conv_layer.16.weight 	 512
+conv_layer.16.bias 	 512
+conv_layer.20.weight 	 2359296
+conv_layer.20.bias 	 512
+conv_layer.21.weight 	 512
+conv_layer.21.bias 	 512
+conv_layer.25.weight 	 5120
+conv_layer.25.bias 	 10
+Total number of trainable parameters:  7682826
+Epoch [1/15], Step [100/245], Loss: 1.4177
+Epoch [1/15], Step [200/245], Loss: 1.2487
+Training accuracy is: 46.3408 %
+Validataion accuracy is: 60.6 %
+Validataion loss is: 1.1520
+Epoch [2/15], Step [100/245], Loss: 1.0010
+Epoch [2/15], Step [200/245], Loss: 1.1618
+Training accuracy is: 60.6184 %
+Validataion accuracy is: 60.9 %
+Validataion loss is: 1.0854
+Epoch [3/15], Step [100/245], Loss: 1.0849
+Epoch [3/15], Step [200/245], Loss: 1.0969
+Training accuracy is: 64.7796 %
+Validataion accuracy is: 63.3 %
+Validataion loss is: 0.9966
+Epoch [4/15], Step [100/245], Loss: 0.9600
+Epoch [4/15], Step [200/245], Loss: 0.7431
+Training accuracy is: 66.9816 %
+Validataion accuracy is: 68.5 %
+Validataion loss is: 0.8681
+Epoch [5/15], Step [100/245], Loss: 0.9333
+Epoch [5/15], Step [200/245], Loss: 0.9224
+Training accuracy is: 69.2265 %
+Validataion accuracy is: 67.1 %
+Validataion loss is: 0.8572
+Epoch [6/15], Step [100/245], Loss: 0.8061
+Epoch [6/15], Step [200/245], Loss: 0.8341
+Training accuracy is: 70.5796 %
+Validataion accuracy is: 73.6 %
+Validataion loss is: 0.7573
+Epoch [7/15], Step [100/245], Loss: 0.6800
+Epoch [7/15], Step [200/245], Loss: 0.8564
+Training accuracy is: 71.6163 %
+Validataion accuracy is: 69.3 %
+Validataion loss is: 0.7571
+Epoch [8/15], Step [100/245], Loss: 0.8327
+Epoch [8/15], Step [200/245], Loss: 0.7478
+Training accuracy is: 72.8122 %
+Validataion accuracy is: 74.2 %
+Validataion loss is: 0.7003
+Epoch [9/15], Step [100/245], Loss: 0.8039
+Epoch [9/15], Step [200/245], Loss: 0.7121
+Training accuracy is: 73.6163 %
+Validataion accuracy is: 74.6 %
+Validataion loss is: 0.6959
+Epoch [10/15], Step [100/245], Loss: 0.6284
+Epoch [10/15], Step [200/245], Loss: 0.8384
+Training accuracy is: 74.0224 %
+Validataion accuracy is: 72.8 %
+Validataion loss is: 0.7231
+Epoch [11/15], Step [100/245], Loss: 0.7243
+Epoch [11/15], Step [200/245], Loss: 0.8274
+Training accuracy is: 75.0122 %
+Validataion accuracy is: 76.9 %
+Validataion loss is: 0.6160
+Epoch [12/15], Step [100/245], Loss: 0.5568
+Epoch [12/15], Step [200/245], Loss: 0.7469
+Training accuracy is: 75.6551 %
+Validataion accuracy is: 77.2 %
+Validataion loss is: 0.6524
+Epoch [13/15], Step [100/245], Loss: 0.7848
+Epoch [13/15], Step [200/245], Loss: 0.7809
+Training accuracy is: 76.0612 %
+Validataion accuracy is: 79.2 %
+Validataion loss is: 0.6251
+Epoch [14/15], Step [100/245], Loss: 0.6434
+Epoch [14/15], Step [200/245], Loss: 0.5224
+Training accuracy is: 76.8551 %
+Validataion accuracy is: 77.3 %
+Validataion loss is: 0.6190
+Epoch [15/15], Step [100/245], Loss: 0.6644
+Epoch [15/15], Step [200/245], Loss: 0.7136
+Training accuracy is: 77.0327 %
+Validataion accuracy is: 80.8 %
+Validataion loss is: 0.5665
+77.0326530612245
+ConvNet(
+  (conv_layer): Sequential(
+    (0): Conv2d(3, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (3): ReLU(inplace=True)
+    (4): Dropout(p=0.7, inplace=False)
+    (5): Conv2d(128, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (6): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (7): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (8): ReLU(inplace=True)
+    (9): Dropout(p=0.7, inplace=False)
+    (10): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (11): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (12): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (13): ReLU(inplace=True)
+    (14): Dropout(p=0.7, inplace=False)
+    (15): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (16): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (17): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (18): ReLU(inplace=True)
+    (19): Dropout(p=0.7, inplace=False)
+    (20): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (21): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (22): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (23): ReLU(inplace=True)
+    (24): Flatten(start_dim=1, end_dim=-1)
+    (25): Linear(in_features=512, out_features=10, bias=True)
+  )
+)
+------------------------------------------------------------------
+Parameters name 	Parameter size 
+
+------------------------------------------------------------------
+conv_layer.0.weight 	 3456
+conv_layer.0.bias 	 128
+conv_layer.1.weight 	 128
+conv_layer.1.bias 	 128
+conv_layer.5.weight 	 589824
+conv_layer.5.bias 	 512
+conv_layer.6.weight 	 512
+conv_layer.6.bias 	 512
+conv_layer.10.weight 	 2359296
+conv_layer.10.bias 	 512
+conv_layer.11.weight 	 512
+conv_layer.11.bias 	 512
+conv_layer.15.weight 	 2359296
+conv_layer.15.bias 	 512
+conv_layer.16.weight 	 512
+conv_layer.16.bias 	 512
+conv_layer.20.weight 	 2359296
+conv_layer.20.bias 	 512
+conv_layer.21.weight 	 512
+conv_layer.21.bias 	 512
+conv_layer.25.weight 	 5120
+conv_layer.25.bias 	 10
+Total number of trainable parameters:  7682826
+Epoch [1/15], Step [100/245], Loss: 1.4620
+Epoch [1/15], Step [200/245], Loss: 1.5068
+Training accuracy is: 39.8306 %
+Validataion accuracy is: 36.2 %
+Validataion loss is: 1.6658
+Epoch [2/15], Step [100/245], Loss: 1.3915
+Epoch [2/15], Step [200/245], Loss: 1.2425
+Training accuracy is: 52.2469 %
+Validataion accuracy is: 50.7 %
+Validataion loss is: 1.3283
+Epoch [3/15], Step [100/245], Loss: 1.2682
+Epoch [3/15], Step [200/245], Loss: 1.2328
+Training accuracy is: 56.0837 %
+Validataion accuracy is: 50.4 %
+Validataion loss is: 1.3412
+Epoch [4/15], Step [100/245], Loss: 1.1473
+Epoch [4/15], Step [200/245], Loss: 1.0716
+Training accuracy is: 58.2571 %
+Validataion accuracy is: 51.9 %
+Validataion loss is: 1.2169
+Epoch [5/15], Step [100/245], Loss: 1.1768
+Epoch [5/15], Step [200/245], Loss: 1.1354
+Training accuracy is: 60.4245 %
+Validataion accuracy is: 47.3 %
+Validataion loss is: 1.4018
+Epoch [6/15], Step [100/245], Loss: 1.0002
+Epoch [6/15], Step [200/245], Loss: 0.9604
+Training accuracy is: 62.0327 %
+Validataion accuracy is: 60.5 %
+Validataion loss is: 1.0051
+Epoch [7/15], Step [100/245], Loss: 1.1132
+Epoch [7/15], Step [200/245], Loss: 0.9952
+Training accuracy is: 63.1163 %
+Validataion accuracy is: 49.3 %
+Validataion loss is: 1.2839
+Epoch [8/15], Step [100/245], Loss: 0.9883
+Epoch [8/15], Step [200/245], Loss: 1.0695
+Training accuracy is: 64.2000 %
+Validataion accuracy is: 58.1 %
+Validataion loss is: 1.0382
+Epoch [9/15], Step [100/245], Loss: 0.9375
+Epoch [9/15], Step [200/245], Loss: 1.1183
+Training accuracy is: 65.0531 %
+Validataion accuracy is: 58.7 %
+Validataion loss is: 1.0017
+Epoch [10/15], Step [100/245], Loss: 0.9471
+Epoch [10/15], Step [200/245], Loss: 0.9702
+Training accuracy is: 65.6551 %
+Validataion accuracy is: 62.6 %
+Validataion loss is: 0.9466
+Epoch [11/15], Step [100/245], Loss: 0.9183
+Epoch [11/15], Step [200/245], Loss: 1.0571
+Training accuracy is: 66.2878 %
+Validataion accuracy is: 60.5 %
+Validataion loss is: 0.9962
+Epoch [12/15], Step [100/245], Loss: 0.9215
+Epoch [12/15], Step [200/245], Loss: 0.8657
+Training accuracy is: 66.6184 %
+Validataion accuracy is: 62.0 %
+Validataion loss is: 0.9377
+Epoch [13/15], Step [100/245], Loss: 0.8494
+Epoch [13/15], Step [200/245], Loss: 0.9275
+Training accuracy is: 67.3061 %
+Validataion accuracy is: 66.3 %
+Validataion loss is: 0.8882
+Epoch [14/15], Step [100/245], Loss: 0.9767
+Epoch [14/15], Step [200/245], Loss: 0.9376
+Training accuracy is: 68.0367 %
+Validataion accuracy is: 61.0 %
+Validataion loss is: 1.0417
+Epoch [15/15], Step [100/245], Loss: 1.0027
+Epoch [15/15], Step [200/245], Loss: 0.9698
+Training accuracy is: 68.4469 %
+Validataion accuracy is: 65.1 %
+Validataion loss is: 0.9245
+68.4469387755102
+ConvNet(
+  (conv_layer): Sequential(
+    (0): Conv2d(3, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): BatchNorm2d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (3): ReLU(inplace=True)
+    (4): Dropout(p=0.9, inplace=False)
+    (5): Conv2d(128, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (6): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (7): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (8): ReLU(inplace=True)
+    (9): Dropout(p=0.9, inplace=False)
+    (10): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (11): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (12): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (13): ReLU(inplace=True)
+    (14): Dropout(p=0.9, inplace=False)
+    (15): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (16): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (17): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (18): ReLU(inplace=True)
+    (19): Dropout(p=0.9, inplace=False)
+    (20): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (21): BatchNorm2d(512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (22): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (23): ReLU(inplace=True)
+    (24): Flatten(start_dim=1, end_dim=-1)
+    (25): Linear(in_features=512, out_features=10, bias=True)
+  )
+)
+------------------------------------------------------------------
+Parameters name 	Parameter size 
+
+------------------------------------------------------------------
+conv_layer.0.weight 	 3456
+conv_layer.0.bias 	 128
+conv_layer.1.weight 	 128
+conv_layer.1.bias 	 128
+conv_layer.5.weight 	 589824
+conv_layer.5.bias 	 512
+conv_layer.6.weight 	 512
+conv_layer.6.bias 	 512
+conv_layer.10.weight 	 2359296
+conv_layer.10.bias 	 512
+conv_layer.11.weight 	 512
+conv_layer.11.bias 	 512
+conv_layer.15.weight 	 2359296
+conv_layer.15.bias 	 512
+conv_layer.16.weight 	 512
+conv_layer.16.bias 	 512
+conv_layer.20.weight 	 2359296
+conv_layer.20.bias 	 512
+conv_layer.21.weight 	 512
+conv_layer.21.bias 	 512
+conv_layer.25.weight 	 5120
+conv_layer.25.bias 	 10
+Total number of trainable parameters:  7682826
+Epoch [1/15], Step [100/245], Loss: 1.9570
+Epoch [1/15], Step [200/245], Loss: 1.8011
+Training accuracy is: 26.2204 %
+Validataion accuracy is: 10.4 %
+Validataion loss is: 3.3445
+Epoch [2/15], Step [100/245], Loss: 1.7087
+Epoch [2/15], Step [200/245], Loss: 1.7296
+Training accuracy is: 33.0592 %
+Validataion accuracy is: 10.3 %
+Validataion loss is: 3.2105
+Epoch [3/15], Step [100/245], Loss: 1.6801
+Epoch [3/15], Step [200/245], Loss: 1.7142
+Training accuracy is: 35.3449 %
+Validataion accuracy is: 10.4 %
+Validataion loss is: 3.2952
+Epoch [4/15], Step [100/245], Loss: 1.7152
+Epoch [4/15], Step [200/245], Loss: 1.7386
+Training accuracy is: 36.6612 %
+Validataion accuracy is: 10.1 %
+Validataion loss is: 3.3435
+Epoch [5/15], Step [100/245], Loss: 1.5836
+Epoch [5/15], Step [200/245], Loss: 1.6734
+Training accuracy is: 37.6490 %
+Validataion accuracy is: 10.2 %
+Validataion loss is: 3.3129
+Epoch [6/15], Step [100/245], Loss: 1.6307
+Epoch [6/15], Step [200/245], Loss: 1.6157
+Training accuracy is: 38.4122 %
+Validataion accuracy is: 10.2 %
+Validataion loss is: 3.3504
+Epoch [7/15], Step [100/245], Loss: 1.7201
+Epoch [7/15], Step [200/245], Loss: 1.5402
+Training accuracy is: 39.5653 %
+Validataion accuracy is: 10.4 %
+Validataion loss is: 3.2300
+Epoch [8/15], Step [100/245], Loss: 1.6797
+Epoch [8/15], Step [200/245], Loss: 1.6106
+Training accuracy is: 40.3857 %
+Validataion accuracy is: 10.2 %
+Validataion loss is: 3.2687
+Epoch [9/15], Step [100/245], Loss: 1.4531
+Epoch [9/15], Step [200/245], Loss: 1.6084
+Training accuracy is: 41.0898 %
+Validataion accuracy is: 10.5 %
+Validataion loss is: 3.2663
+Epoch [10/15], Step [100/245], Loss: 1.4817
+Epoch [10/15], Step [200/245], Loss: 1.4362
+Training accuracy is: 41.8633 %
+Validataion accuracy is: 10.2 %
+Validataion loss is: 3.4084
+Epoch [11/15], Step [100/245], Loss: 1.4507
+Epoch [11/15], Step [200/245], Loss: 1.6125
+Training accuracy is: 42.3204 %
+Validataion accuracy is: 10.2 %
+Validataion loss is: 3.3750
+Epoch [12/15], Step [100/245], Loss: 1.5453
+Epoch [12/15], Step [200/245], Loss: 1.5138
+Training accuracy is: 42.8816 %
+Validataion accuracy is: 10.3 %
+Validataion loss is: 3.2273
+Epoch [13/15], Step [100/245], Loss: 1.6402
+Epoch [13/15], Step [200/245], Loss: 1.4884
+Training accuracy is: 43.4327 %
+Validataion accuracy is: 10.2 %
+Validataion loss is: 3.4576
+Epoch [14/15], Step [100/245], Loss: 1.4729
+Epoch [14/15], Step [200/245], Loss: 1.5741
+Training accuracy is: 43.7878 %
+Validataion accuracy is: 10.2 %
+Validataion loss is: 3.4443
+Epoch [15/15], Step [100/245], Loss: 1.4932
+Epoch [15/15], Step [200/245], Loss: 1.4930
+Training accuracy is: 44.3286 %
+Validataion accuracy is: 10.3 %
+Validataion loss is: 3.5129
+44.32857142857143

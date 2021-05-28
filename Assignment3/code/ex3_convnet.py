@@ -222,7 +222,11 @@ optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate, weight_decay=
 lr = learning_rate
 total_step = len(train_loader)
 val_loss = []
+val_acc = []
+patience = patience_init
 for epoch in range(num_epochs):
+    correct = 0
+    total = 0
     for i, (images, labels) in enumerate(train_loader):
         # Move tensors to the configured device
         images = images.to(device)
@@ -238,12 +242,17 @@ for epoch in range(num_epochs):
         loss.backward()
         optimizer.step()
 
+        _, predicted = torch.max(outputs.data, 1)
+        total += labels.size(0)
+        correct += (predicted == labels).sum().item()
+        acc = 100 * correct / total
+
         if (i+1) % 100 == 0:
             print ('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}'
                    .format(epoch+1, num_epochs, i+1, total_step, loss.item()))
-    writer.add_scalar('training loss',
-        loss.item(),
-        epoch)
+    print('Training accuracy is: {:.4f} %'.format(acc))
+    writer.add_scalar('training loss', loss.item(), epoch)
+    writer.add_scalar('Training Accuracy', acc, epoch)
 
     # Code to update the lr
     lr *= learning_rate_decay
@@ -261,19 +270,17 @@ for epoch in range(num_epochs):
             correct += (predicted == labels).sum().item()
         acc = 100 * correct / total
         print('Validataion accuracy is: {} %'.format(acc))
-        writer.add_scalar('Validation Accuracy',
-            acc,
-            epoch)
+        writer.add_scalar('Validation Accuracy', acc, epoch)
         #################################################################################
         # TODO: Q2.b Implement the early stopping mechanism to save the model which has #
         # acheieved the best validation accuracy so-far.                                #
         #################################################################################
         #best_model = None
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-        val_acc.append((100 * correct / total))
+        # val_acc.append(acc)
         val_loss.append(criterion(outputs,labels).item())
         print('Validataion loss is: {:.4f}'.format(criterion(outputs,labels).item()))
-        
+        writer.add_scalar('Validation loss', criterion(outputs,labels).item(), epoch)
         if patience != 0: 
           if epoch==0:
             best_model = model.state_dict() # first epoch
