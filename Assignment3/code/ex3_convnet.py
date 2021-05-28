@@ -38,6 +38,7 @@ reg=0.001
 num_training= 49000
 num_validation =1000
 norm_layer = None
+patience_init = 4 # we wait for 5 epochs for the validation loss to go down
 print(hidden_size)
 
 
@@ -111,13 +112,14 @@ class ConvNet(nn.Module):
         layers.append(nn.BatchNorm2d(hidden_layers[0]))
         layers.append(nn.MaxPool2d(kernel_size=2, stride=2))
         layers.append(nn.ReLU(inplace=True))
-        layers.append(nn.Dropout(p=dropout_value))
+        if dropout_value:
+          layers.append(nn.Dropout(p=dropout_value))
         for i in range(1, len(hidden_layers)-1):
             layers.append(nn.Conv2d(in_channels=hidden_layers[i-1], out_channels=hidden_layers[i], kernel_size=3, padding=1))
             layers.append(nn.BatchNorm2d(hidden_layers[i]))
             layers.append(nn.MaxPool2d(kernel_size=2, stride=2))
             layers.append(nn.ReLU(inplace=True))
-            if i<len(hidden_layers)-2:
+            if dropout_value and i<len(hidden_layers)-2:
               layers.append(nn.Dropout(p=dropout_value))
         layers.append(nn.Flatten())
         layers.append(nn.Linear(512, num_classes))
@@ -266,27 +268,42 @@ for epoch in range(num_epochs):
         # TODO: Q2.b Implement the early stopping mechanism to save the model which has #
         # acheieved the best validation accuracy so-far.                                #
         #################################################################################
-        best_model = None
+        #best_model = None
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+        val_acc.append((100 * correct / total))
         val_loss.append(criterion(outputs,labels).item())
         print('Validataion loss is: {:.4f}'.format(criterion(outputs,labels).item()))
-        writer.add_scalar('Validation loss',
-            criterion(outputs,labels).item(),
-            epoch)
-
+        
+        if patience != 0: 
+          if epoch==0:
+            best_model = model.state_dict() # first epoch
+          elif (val_loss[epoch]<min(val_loss[:-1])):
+            print("SAVING best model")
+            best_model = model.state_dict() # best model if current loss < min loss so far
+            patience = patience_init # reassign patience
+          else:
+            patience -= 1
+        else:
+          print("EARLY STOPPING and saving the best model!")
+          torch.save(best_model, 'model_earlyStop.ckpt')
+          break
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
     model.train()
 
 # Test the model
 # In test phase, we don't need to compute gradients (for memory efficiency)
-model.eval()
+#model.eval()
 #################################################################################
 # TODO: Q2.b Implement the early stopping mechanism to load the weights from the#
 # best model so far and perform testing with this model.                        #
 #################################################################################
 # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
+model = ConvNet(input_size, hidden_size, num_classes, norm_layer=norm_layer).to(device)
+model.load_state_dict(torch.load('model_earlyStop.ckpt'))
+model.eval()
+print("***LOADED BEST MODEL***")
+#print(model.state_dict())
 # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 with torch.no_grad():
     correct = 0
@@ -307,5 +324,5 @@ with torch.no_grad():
 # Visualize the filters before training
 VisualizeFilter(model)
 # Save the model checkpoint
-torch.save(model.state_dict(), 'model.ckpt')
+#torch.save(model.state_dict(), 'model.ckpt')
 
