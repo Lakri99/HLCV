@@ -5,6 +5,9 @@ import torchvision.transforms as transforms
 import numpy as np
 
 import matplotlib.pyplot as plt
+from torch.utils.tensorboard import SummaryWriter
+
+writer = SummaryWriter('runs/cnn-basic')
 
 def weights_init(m):
     if type(m) == nn.Linear:
@@ -236,6 +239,9 @@ for epoch in range(num_epochs):
         if (i+1) % 100 == 0:
             print ('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}'
                    .format(epoch+1, num_epochs, i+1, total_step, loss.item()))
+    writer.add_scalar('training loss',
+        loss.item(),
+        epoch)
 
     # Code to update the lr
     lr *= learning_rate_decay
@@ -251,8 +257,11 @@ for epoch in range(num_epochs):
             _, predicted = torch.max(outputs.data, 1)
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
-
-        print('Validataion accuracy is: {} %'.format(100 * correct / total))
+        acc = 100 * correct / total
+        print('Validataion accuracy is: {} %'.format(acc))
+        writer.add_scalar('Validation Accuracy',
+            acc,
+            epoch)
         #################################################################################
         # TODO: Q2.b Implement the early stopping mechanism to save the model which has #
         # acheieved the best validation accuracy so-far.                                #
@@ -261,6 +270,9 @@ for epoch in range(num_epochs):
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         val_loss.append(criterion(outputs,labels).item())
         print('Validataion loss is: {:.4f}'.format(criterion(outputs,labels).item()))
+        writer.add_scalar('Validation loss',
+            criterion(outputs,labels).item(),
+            epoch)
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
