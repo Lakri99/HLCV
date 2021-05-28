@@ -1,0 +1,122 @@
+(lightning) root@8b02602e1f32:/home/HLCV# /root/miniconda3/envs/lightning/bin/python /home/HLCV/Assignment3/code/ex3_convnet.py
+Using device: cuda
+[128, 512, 512, 512, 512, 512]
+ConvNet(
+  (conv_layer): Sequential(
+    (0): Conv2d(3, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (1): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (2): ReLU(inplace=True)
+    (3): Conv2d(128, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (4): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (5): ReLU(inplace=True)
+    (6): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (7): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (8): ReLU(inplace=True)
+    (9): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (10): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (11): ReLU(inplace=True)
+    (12): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (13): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    (14): ReLU(inplace=True)
+    (15): Flatten(start_dim=1, end_dim=-1)
+    (16): Linear(in_features=512, out_features=10, bias=True)
+  )
+)
+------------------------------------------------------------------
+Parameters name         Parameter size 
+
+------------------------------------------------------------------
+conv_layer.0.weight      3456
+conv_layer.0.bias        128
+conv_layer.3.weight      589824
+conv_layer.3.bias        512
+conv_layer.6.weight      2359296
+conv_layer.6.bias        512
+conv_layer.9.weight      2359296
+conv_layer.9.bias        512
+conv_layer.12.weight     2359296
+conv_layer.12.bias       512
+conv_layer.16.weight     5120
+conv_layer.16.bias       10
+Total number of trainable parameters:  7678474
+Epoch [1/20], Step [100/245], Loss: 1.6450
+Epoch [1/20], Step [200/245], Loss: 1.2501
+Validataion accuracy is: 55.5 %
+Validataion loss is: 1.3484
+Epoch [2/20], Step [100/245], Loss: 1.1252
+Epoch [2/20], Step [200/245], Loss: 0.9611
+Validataion accuracy is: 65.4 %
+Validataion loss is: 0.9411
+Epoch [3/20], Step [100/245], Loss: 0.8426
+Epoch [3/20], Step [200/245], Loss: 0.8087
+Validataion accuracy is: 69.1 %
+Validataion loss is: 0.8253
+Epoch [4/20], Step [100/245], Loss: 0.6953
+Epoch [4/20], Step [200/245], Loss: 0.6688
+Validataion accuracy is: 73.2 %
+Validataion loss is: 0.6517
+Epoch [5/20], Step [100/245], Loss: 0.5475
+Epoch [5/20], Step [200/245], Loss: 0.5458
+Validataion accuracy is: 75.6 %
+Validataion loss is: 0.7192
+Epoch [6/20], Step [100/245], Loss: 0.5164
+Epoch [6/20], Step [200/245], Loss: 0.5175
+Validataion accuracy is: 76.9 %
+Validataion loss is: 0.6128
+Epoch [7/20], Step [100/245], Loss: 0.5060
+Epoch [7/20], Step [200/245], Loss: 0.5495
+Validataion accuracy is: 79.7 %
+Validataion loss is: 0.6102
+Epoch [8/20], Step [100/245], Loss: 0.5678
+Epoch [8/20], Step [200/245], Loss: 0.3979
+Validataion accuracy is: 78.7 %
+Validataion loss is: 0.6650
+Epoch [9/20], Step [100/245], Loss: 0.3593
+Epoch [9/20], Step [200/245], Loss: 0.4119
+Validataion accuracy is: 80.5 %
+Validataion loss is: 0.6551
+Epoch [10/20], Step [100/245], Loss: 0.2874
+Epoch [10/20], Step [200/245], Loss: 0.4531
+Validataion accuracy is: 78.2 %
+Validataion loss is: 0.6656
+Epoch [11/20], Step [100/245], Loss: 0.3250
+Epoch [11/20], Step [200/245], Loss: 0.3668
+Validataion accuracy is: 79.7 %
+Validataion loss is: 0.6543
+Epoch [12/20], Step [100/245], Loss: 0.2784
+Epoch [12/20], Step [200/245], Loss: 0.3103
+Validataion accuracy is: 79.7 %
+Validataion loss is: 0.6891
+Epoch [13/20], Step [100/245], Loss: 0.2267
+Epoch [13/20], Step [200/245], Loss: 0.1857
+Validataion accuracy is: 80.0 %
+Validataion loss is: 0.6724
+Epoch [14/20], Step [100/245], Loss: 0.1851
+Epoch [14/20], Step [200/245], Loss: 0.2451
+Validataion accuracy is: 80.3 %
+Validataion loss is: 0.7408
+Epoch [15/20], Step [100/245], Loss: 0.2062
+Epoch [15/20], Step [200/245], Loss: 0.1934
+Validataion accuracy is: 79.9 %
+Validataion loss is: 0.7282
+Epoch [16/20], Step [100/245], Loss: 0.1397
+Epoch [16/20], Step [200/245], Loss: 0.1825
+Validataion accuracy is: 80.2 %
+Validataion loss is: 0.6484
+Epoch [17/20], Step [100/245], Loss: 0.0767
+Epoch [17/20], Step [200/245], Loss: 0.1036
+Validataion accuracy is: 79.9 %
+Validataion loss is: 0.8092
+Epoch [18/20], Step [100/245], Loss: 0.1354
+Epoch [18/20], Step [200/245], Loss: 0.1707
+Validataion accuracy is: 79.2 %
+Validataion loss is: 0.8563
+Epoch [19/20], Step [100/245], Loss: 0.0724
+Epoch [19/20], Step [200/245], Loss: 0.0984
+Validataion accuracy is: 80.0 %
+Validataion loss is: 0.8429
+Epoch [20/20], Step [100/245], Loss: 0.0387
+Epoch [20/20], Step [200/245], Loss: 0.1249
+Validataion accuracy is: 80.1 %
+Validataion loss is: 0.8511
+Accuracy of the network on the 1000 test images: 80.9 %
