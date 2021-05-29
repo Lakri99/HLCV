@@ -52,6 +52,23 @@ print(hidden_size)
 data_aug_transforms = []
 # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
+#data_aug_transforms = [transforms.ColorJitter(brightness=0.4, contrast=0.4, saturation=0.4, hue=0.2)]
+#data_aug_transforms = [transforms.RandomGrayscale(num_output_channels=1)]
+
+#data_aug_transforms = [transforms.RandomHorizontalFlip(p=0.5)]
+#data_aug_transforms = [transforms.RandomVerticalFlip(p=0.05)]
+
+#data_aug_transforms = [transforms.RandomRotation(degrees=45)]
+#data_aug_transforms = [transforms.RandomAffine(degrees =  0, translate = (0.125, 0.125))]
+
+#data_aug_transforms = [transforms.RandomApply([transforms.RandomHorizontalFlip(p=0.5), 
+#                                               transforms.RandomAffine(degrees =  0, translate = (0.125, 0.125))], p=0.6)
+
+#data_aug_transforms = [transforms.RandomHorizontalFlip(p=0.5), transforms.RandomVerticalFlip(p=0.05),
+#                       transforms.RandomAffine(degrees =  0, translate = (0.125, 0.125))]
+
+data_aug_transforms = [transforms.RandomHorizontalFlip(p=0.5), transforms.RandomAffine(degrees =  0, translate = (0.125, 0.125))]
+
 # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 norm_transform = transforms.Compose(data_aug_transforms+[transforms.ToTensor(),
                                      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
