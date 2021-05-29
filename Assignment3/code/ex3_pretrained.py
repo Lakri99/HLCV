@@ -95,6 +95,7 @@ def set_parameter_requires_grad(model, feature_extracting):
         for param in model.parameters():
             param.requires_grad = False
 
+#New method for Plotting Loss and Accuracy curves
 def plot_loss_accuracy(avg_train_loss, avg_val_loss, valacc_hist):
     #Plots for training vs Validation loss 
     plt.plot(avg_train_loss, label='Train')
@@ -149,6 +150,7 @@ def plot_loss_accuracy(avg_train_loss, avg_val_loss, valacc_hist):
         plt.savefig('Plot_ValAcc_Baseline.pdf')
         
     plt.close()
+
 class VggModel(nn.Module):
     def __init__(self, n_class, fine_tune, pretrained=True):
         super(VggModel, self).__init__()
