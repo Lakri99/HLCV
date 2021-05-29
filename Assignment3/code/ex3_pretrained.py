@@ -5,6 +5,8 @@ import torchvision
 from torchvision import models
 import torchvision.transforms as transforms
 import matplotlib.pyplot as plt
+import numpy as np
+import copy
 
 def weights_init(m):
     if type(m) == nn.Linear:
@@ -34,9 +36,12 @@ learning_rate_decay = 0.99
 reg=0#0.001
 num_training= 49000
 num_validation =1000
-fine_tune = True
+#Flag for training feature extaction layers. When True, we will only update the reshaped parms
+#When False, we will fine tune the entire model
+fine_tune = True 
 pretrained=True
-verbose = True # Debugging using print statements, will be turned off by default
+# Flag for enabling additional print statements
+verbose = True 
 
 # early stopping patience:how long to wait after last time validation loss improved
 patience = 5
@@ -90,6 +95,60 @@ def set_parameter_requires_grad(model, feature_extracting):
         for param in model.parameters():
             param.requires_grad = False
 
+def plot_loss_accuracy(avg_train_loss, avg_val_loss, valacc_hist):
+    #Plots for training vs Validation loss 
+    plt.plot(avg_train_loss, label='Train')
+    plt.plot(avg_val_loss,label='Val')                   
+    plt.xlabel('epochs')        
+    plt.ylabel('loss')
+    if pretrained:
+        if fine_tune:
+            plt.title('Clasification Loss history with Train New FC layers')
+        else:
+            plt.title('Clasification Loss history with Train all Layers')
+    else:
+        plt.title('Clasification Loss history with Baseline Model')
+    plt.legend(loc='upper right')
+    plt.tight_layout()
+    plt.grid(True)
+    plt.show()
+    if pretrained:
+        if fine_tune:
+            plt.savefig('Plot_loss_pretrained.pdf')
+        else:
+            plt.savefig('Plot_loss_full_train.pdf')
+    else:
+        plt.savefig('Plot_loss_Baseline.pdf')
+
+    #Val Accuracy curve
+    plt.plot(range(1,len(valacc_hist)+1),valacc_hist,label = "Val Acc")
+    if pretrained:
+        if fine_tune:
+            plt.title('Validation Accuracy vs Epochs with Train New FC layers')
+        else:
+            plt.title('Validation Accuracy vs Epochs with Train All layers')
+    else:
+        plt.title('Validation Accuracy vs Epochs with Baseline Model')
+                    
+    # find early stopping checkpoint in the Plot
+    minposs = valacc_hist.index(max(valacc_hist))+1
+    plt.axvline(minposs, linestyle='--', color='r',label='Checkpoint')
+    plt.xlabel('epochs')
+    plt.ylabel('Validation Accuracy')
+    plt.ylim(0, 1.) # consistent scale
+    plt.xlim(0, len(valacc_hist)+1) # consistent scale
+    plt.legend(loc='upper right')
+    plt.grid(True)
+    plt.show()
+    if pretrained:
+        if fine_tune:
+            plt.savefig('Plot_Valacc_Pretrained.pdf')
+        else:
+            plt.savefig('Plot_Valcc_Full_Train.pdf')
+    else:
+        plt.savefig('Plot_ValAcc_Baseline.pdf')
+        
+    plt.close()
 class VggModel(nn.Module):
     def __init__(self, n_class, fine_tune, pretrained=True):
         super(VggModel, self).__init__()
@@ -103,33 +162,30 @@ class VggModel(nn.Module):
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         #Load the pretrained VGG11_BN model
         if pretrained:
-            self.vgg_pret_model = models.vgg11_bn(pretrained=pretrained)
+            pt_vgg = models.vgg11_bn(pretrained=pretrained)
             if verbose:
-                print("before removing classifier layers")
-                print(self.vgg_pret_model)
-            
-            #Freezing the layers
-            if fine_tune:
-                set_parameter_requires_grad(self.vgg_pret_model, fine_tune)
+                print('##### Before removing classifier layer #####')
+                print(pt_vgg)
+
+            #Freeze the layers
+            set_parameter_requires_grad(pt_vgg, fine_tune)
 
             #Deleting old FC layers from pretrained VGG model
-            print("Deleting Classifier Layers")
-            del self.vgg_pret_model.avgpool
-            del self.vgg_pret_model.classifer
-        
+            print('### Deleting Avg pooling and FC Layers ####')
+            del pt_vgg.avgpool
+            del pt_vgg.classifier
+
+            self.model_features = nn.Sequential(*list(pt_vgg.features.children()))
+            
             #Adding new FC layers with BN and RELU for CIFAR10 classification
-            self.vgg_pret_model.classifier = nn.Sequential(
+            self.model_classifier = nn.Sequential(
                 nn.Linear(layer_config[0], layer_config[1]),
                 nn.BatchNorm2d(layer_config[1]),
-                nn.RELU(inplace=True),
+                nn.ReLU(inplace=True),
                 nn.Linear(layer_config[1], num_classes),
             )
         else: # Baseline VGG11_BN model without IMAGENET weights
-            self.vgg_baseline = models.vgg11_bn(pretrained=pretrained)
-            if verbose:
-                print("Baseline VGG Model")
-                print(self.vgg_baseline)
-
+            self.vgg_scratch = models.vgg11_bn(pretrained=pretrained)
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
     def forward(self, x):
@@ -138,11 +194,11 @@ class VggModel(nn.Module):
         #################################################################################
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         if pretrained:
-            x = self.vgg_pret_model.features(x)
-            #Flatten
-            x = x.view(x.size(0),-1)
-            #FC layer
-            out = self.vgg_baseline.classifier(x)
+            x = self.model_features(x)
+            x = x.squeeze()
+            out = self.model_classifier(x)
+        else:
+            out = self.vgg_scratch(x)
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         return out
@@ -183,12 +239,19 @@ optimizer = torch.optim.Adam(params_to_update, lr=learning_rate, weight_decay=re
 # Train the model
 lr = learning_rate
 total_step = len(train_loader)
-new_valacc = 0 # Validation accuracy per epoch as model trains
-old_valacc = 0 # For early stoppinh to check if val accuracy per epoch has not improved
-valacc = [] # To track validation accuracies as model trains
+epoch_valacc = 0 # Validation accuracy per epoch as model trains
+best_valacc = 0 # Best Validation accuracy, used for early stopping check
+valacc_hist = [] # To track validation accuracy history as model trains
+train_loss_hist = [] # To track training loss as model trains
+valid_loss_hist = [] # To track validation loss as the model trains
+avg_train_loss = [] # Per epoch training loss
+avg_val_loss = [] # Per epoch validation loss
 stop_count = 0
+
+
 for epoch in range(num_epochs):
-    for i, (images, labels) in enumerate(train_loader):
+    model.train()# Prepare for training
+    for i, (images, labels) in enumerate(train_loader): # Train the model
         # Move tensors to the configured device
         images = images.to(device)
         labels = labels.to(device)
@@ -205,11 +268,14 @@ for epoch in range(num_epochs):
         if (i+1) % 100 == 0:
             print ('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}'
                    .format(epoch+1, num_epochs, i+1, total_step, loss.item()))
+        #record training loss
+        train_loss_hist.append(loss.item())
 
     # Code to update the lr
     lr *= learning_rate_decay
     update_lr(optimizer, lr)
-    with torch.no_grad():
+    model.eval() #Prepare for Evaluation
+    with torch.no_grad(): # Validate the model
         correct = 0
         total = 0
         for images, labels in val_loader:
@@ -217,61 +283,76 @@ for epoch in range(num_epochs):
             labels = labels.to(device)
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
             outputs = model(images)
+            #Caluclate the loss
+            loss = criterion(outputs,labels)
+            #record the loss
+            valid_loss_hist.append(loss.item())
             _, predicted = torch.max(outputs.data, 1)
             # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
             total += labels.size(0)
             correct += (predicted == labels).sum().item()
-        #Per epoch calculation    
-        new_valacc = 100 * correct / total
-        valacc.append(new_valacc)
+        #Per epoch valdication accuracy calculation
+        epoch_valacc = correct / total
+        valacc_hist.append(epoch_valacc)
+ 
+        # calculate average loss over an epoch
+        train_loss = np.average(train_loss_hist)
+        valid_loss = np.average(valid_loss_hist)
+        avg_train_loss.append(train_loss)
+        avg_val_loss.append(valid_loss)
+
+        print ('Epoch [{}/{}], Avg Train Loss: {:.4f}, Avg Val Loss: {:.4f}'
+                   .format(epoch+1, num_epochs, train_loss, valid_loss))
+
+        #Clear Train and Val history after each Epoch
+        train_loss_hist = []
+        valid_loss_hist = []
+
         #################################################################################
         # TODO: Q2.b Use the early stopping mechanism from previous questions to save   #
         # the model which has acheieved the best validation accuracy so-far.            #
         #################################################################################
         best_model = None
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-        if old_valacc<=new_valacc:
-            old_valacc = new_valacc
-            if verbose:
-                print('Saving the best model')
-            best_model = torch.save(model.state_dict(), 'model.ckpt')
+        if best_valacc<=epoch_valacc:
+            best_valacc = epoch_valacc
+            #Store best model weights
+            best_model_wts = copy.deepcopy(model.state_dict())
             stop_count = 0
+            print('SAVING the best model')
+            torch.save(best_model_wts, 'model_'+str(epoch+1)+'.ckpt')
         else:
             stop_count+=1
             if stop_count >=patience: #early stopping check
                 if verbose:
-                    print('End Training after Epochs: [{}]'.format(epoch))
-                    fig = plt.figure(figsize=(10,8))
-                    plt.plot(range(1,len(valacc)+1),valacc)
-                    # find early stopping checkpoint
-                    minposs = valacc.index(max(valacc))+1
-                    plt.axvline(minposs, linestyle='--', color='r',label='Early Stopping Checkpoint')
-                    plt.xlabel('epochs')
-                    plt.ylabel('Validation Accuracy')
-                    plt.grid(True)
-                    plt.legend()
-                    plt.tight_layout()
-                    plt.savefig('Plot_Validation.pdf')
-                    plt.close()
+                    print('End Training after [{}] Epochs'.format(epoch+1))
+                    #Save the best model
+                    best_model = best_model_wts
+                    torch.save(best_model, 'model_earlystop.ckpt')
                     break
-                
+        
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-        print('Validataion accuracy is: {} %'.format(old_valacc))
+        print('Validataion accuracy is: {:.2f} %'.format(100* epoch_valacc))
+
+#Plot curves
+plot_loss_accuracy(avg_train_loss,avg_val_loss,valacc_hist)
+print('Validation Accuracy for the Best Model is: {:.2f} %'.format(100* best_valacc))
 
 #################################################################################
 # TODO: Use the early stopping mechanism from previous question to load the     #
 # weights from the best model so far and perform testing with this model.       #
 #################################################################################
 # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-if verbose:
-    print('Loading the best model')
-best_model = torch.load('model.ckpt') 
-model.load_state_dict(best_model)
+print('LOADING the best model')
+#Load the last checkpoint with the best model
+model.load_state_dict(torch.load('model_earlystop.ckpt'))
 # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
 # Test the model
 # In test phase, we don't need to compute gradients (for memory efficiency)
+print("Test the Trained Network")
+model.eval() #Prepare for evaluation
 with torch.no_grad():
     correct = 0
     total = 0
@@ -288,5 +369,5 @@ with torch.no_grad():
     print('Accuracy of the network on the {} test images: {} %'.format(total, 100 * correct / total))
 
 # Save the model checkpoint
-torch.save(model.state_dict(), 'model.ckpt')
+torch.save(model.state_dict(), 'final_model.ckpt')
 
