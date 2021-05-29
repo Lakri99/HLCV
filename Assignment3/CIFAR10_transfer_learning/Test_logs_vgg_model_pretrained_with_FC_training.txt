@@ -1,0 +1,57 @@
+Epoch [1/30], Step [100/245], Loss: 1.0023
+Epoch [1/30], Step [200/245], Loss: 1.0529
+Epoch [1/30], Avg Train Loss: 1.2335, Avg Val Loss: 1.0969
+SAVING the best model
+Validataion accuracy is: 60.40 %
+Epoch [2/30], Step [100/245], Loss: 1.0070
+Epoch [2/30], Step [200/245], Loss: 0.9445
+Epoch [2/30], Avg Train Loss: 1.0215, Avg Val Loss: 1.0456
+SAVING the best model
+Validataion accuracy is: 63.40 %
+Epoch [3/30], Step [100/245], Loss: 0.8854
+Epoch [3/30], Step [200/245], Loss: 1.0474
+Epoch [3/30], Avg Train Loss: 0.9480, Avg Val Loss: 1.0294
+Validataion accuracy is: 62.00 %
+Epoch [4/30], Step [100/245], Loss: 0.7845
+Epoch [4/30], Step [200/245], Loss: 0.8807
+Epoch [4/30], Avg Train Loss: 0.8825, Avg Val Loss: 1.0481
+SAVING the best model
+Validataion accuracy is: 64.30 %
+Epoch [5/30], Step [100/245], Loss: 0.8207
+Epoch [5/30], Step [200/245], Loss: 0.9872
+Epoch [5/30], Avg Train Loss: 0.8273, Avg Val Loss: 1.0477
+Validataion accuracy is: 62.40 %
+Epoch [6/30], Step [100/245], Loss: 0.8100
+Epoch [6/30], Step [200/245], Loss: 0.8007
+Epoch [6/30], Avg Train Loss: 0.7753, Avg Val Loss: 1.0159
+SAVING the best model
+Validataion accuracy is: 65.80 %
+Epoch [7/30], Step [100/245], Loss: 0.7372
+Epoch [7/30], Step [200/245], Loss: 0.6386
+Epoch [7/30], Avg Train Loss: 0.7209, Avg Val Loss: 1.0390
+Validataion accuracy is: 65.20 %
+Epoch [8/30], Step [100/245], Loss: 0.6359
+Epoch [8/30], Step [200/245], Loss: 0.6228
+Epoch [8/30], Avg Train Loss: 0.6790, Avg Val Loss: 1.0512
+Validataion accuracy is: 63.80 %
+Epoch [9/30], Step [100/245], Loss: 0.6903
+Epoch [9/30], Step [200/245], Loss: 0.6158
+Epoch [9/30], Avg Train Loss: 0.6312, Avg Val Loss: 1.0661
+Validataion accuracy is: 65.50 %
+Epoch [10/30], Step [100/245], Loss: 0.7018
+Epoch [10/30], Step [200/245], Loss: 0.6049
+Epoch [10/30], Avg Train Loss: 0.5916, Avg Val Loss: 1.1298
+Validataion accuracy is: 64.20 %
+Epoch [11/30], Step [100/245], Loss: 0.5021
+Epoch [11/30], Step [200/245], Loss: 0.5737
+Epoch [11/30], Avg Train Loss: 0.5571, Avg Val Loss: 1.1583
+End Training after [11] Epochs
+
+Validation Accuracy for the Best Model is: 65.80 %
+
+
+
+
+LOADING the best model
+Test the Trained Network
+Accuracy of the network on the 1000 test images: 62.9 %
