@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from torch.utils.tensorboard import SummaryWriter
 
-writer = SummaryWriter('runs/cnn-basic')
+writer = SummaryWriter('runs/final_noaug')
 
 def weights_init(m):
     if type(m) == nn.Linear:
@@ -30,7 +30,7 @@ print('Using device: %s'%device)
 input_size = 3
 num_classes = 10
 hidden_size = [128, 512, 512, 512, 512, 512]
-num_epochs = 20
+num_epochs = 30
 batch_size = 200
 learning_rate = 2e-3
 learning_rate_decay = 0.95
@@ -52,6 +52,27 @@ print(hidden_size)
 data_aug_transforms = []
 # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
+#data_aug_transforms = [transforms.ColorJitter(brightness=0.4, contrast=0.4, saturation=0.4, hue=0.2)]
+#data_aug_transforms = [transforms.RandomGrayscale()]
+
+#data_aug_transforms = [transforms.RandomHorizontalFlip(p=0.5)]
+#data_aug_transforms = [transforms.RandomVerticalFlip(p=0.05)]
+
+#data_aug_transforms = [transforms.RandomRotation(degrees=45)]
+#data_aug_transforms = [transforms.RandomAffine(degrees =  0, translate = (0.125, 0.125))]
+
+#data_aug_transforms = [transforms.RandomApply([transforms.ColorJitter(brightness=0.4, contrast=0.4, saturation=0.4, hue=0.2),
+#                                               transforms.RandomGrayscale(),
+#                                               transforms.RandomHorizontalFlip(p=0.5), 
+#                                               transforms.RandomVerticalFlip(p=0.05),
+#                                               transforms.RandomRotation(degrees=45),
+#                                               transforms.RandomAffine(degrees =  0, translate = (0.125, 0.125))], p=0.6)]
+
+#data_aug_transforms = [transforms.RandomHorizontalFlip(p=0.5), transforms.RandomVerticalFlip(p=0.05),
+#                       transforms.RandomAffine(degrees =  0, translate = (0.125, 0.125))]
+
+data_aug_transforms = [transforms.RandomHorizontalFlip(p=0.5), transforms.RandomAffine(degrees =  0, translate = (0.125, 0.125))]
+
 # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 norm_transform = transforms.Compose(data_aug_transforms+[transforms.ToTensor(),
                                      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
@@ -62,7 +83,7 @@ test_transform = transforms.Compose([transforms.ToTensor(),
 cifar_dataset = torchvision.datasets.CIFAR10(root='datasets/',
                                            train=True,
                                            transform=norm_transform,
-                                           download=False)
+                                           download=True)
 
 test_dataset = torchvision.datasets.CIFAR10(root='datasets/',
                                           train=False,
@@ -277,14 +298,14 @@ for epoch in range(num_epochs):
         #################################################################################
         #best_model = None
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-        # val_acc.append(acc)
+        val_acc.append(acc)
         val_loss.append(criterion(outputs,labels).item())
         print('Validataion loss is: {:.4f}'.format(criterion(outputs,labels).item()))
         writer.add_scalar('Validation loss', criterion(outputs,labels).item(), epoch)
         if patience != 0: 
           if epoch==0:
             best_model = model.state_dict() # first epoch
-          elif (val_loss[epoch]<min(val_loss[:-1])):
+          elif (val_acc[epoch]>max(val_acc[:-1])):
             print("SAVING best model")
             best_model = model.state_dict() # best model if current loss < min loss so far
             patience = patience_init # reassign patience
